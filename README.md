@@ -4,7 +4,7 @@
 性质高度地形，1869 年历史视角，可导出 GLB 模型文件。
 
 **公网地址：https://matrix-air.github.io/periodic-table-3d/**（GitHub Pages，2026-10-05 发布）
-**姊妹页 · 45 天化学修炼场：https://matrix-air.github.io/periodic-table-3d/arena.html**（打怪升级版游戏化执行层，3D 页右上金色按钮直达，修炼场右上可返回）
+**姊妹内容**：3D 页右上三枚金色按钮——「⚔️ 45 天修炼场」（新标签 arena.html）、「📜 冲刺结构树」「📊 图表沙盘」（叠加层：结构内容做前景，**周期表做背景板**缓转，Esc/× 收起）
 
 ## 快速开始
 
@@ -60,9 +60,11 @@
 ```
 index.html          页面骨架 + importmap
 style.css           暗色主题 UI
-app.js              三维主程序（排布/交互/纹理/导出）
+app.js              三维主程序（排布/交互/纹理/导出/叠加层）
 data/elements.js    118 元素数据 + 分区色板
-arena.html          45 天化学修炼场（打怪升级版，自包含，来自 deepseek harness/45天冲刺结构树，仅加返回链接）
+arena.html          45 天化学修炼场（打怪升级版，自包含，仅加返回链接）
+tree.html           45 天化学冲刺结构树（同源 deepseek harness/45天冲刺结构树，仅加返回链接）
+charts.html         45 天冲刺 · 图表与流程地图（同上）
 assets/             three.js r160 + OrbitControls + GLTFExporter（本地化）
 shots/              运行实录截图
 start.sh            一键启动
