@@ -33,7 +33,7 @@
   table.journey th{font-size:11px;color:#cfe0f5;background:#1a2432;border-radius:6px;padding:6px 8px;font-weight:700;text-align:left}
   table.journey td{background:var(--panel);border:1px solid #26364a;border-radius:8px;padding:7px 9px;font-size:10.5px;line-height:1.65;vertical-align:top}
   table.journey td.badge{white-space:nowrap;font-weight:800;color:#141414;border-radius:20px;text-align:center;font-size:11.5px;padding:8px 10px;width:120px}
-  .b1{background:#8fa8c8}.b2{background:var(--c)}.b3{background:var(--ok)}.b4{background:var(--warm)}.b5{background:var(--m)}
+  table.journey .b1{background:#8fa8c8}table.journey .b2{background:var(--c)}table.journey .b3{background:var(--ok)}table.journey .b4{background:var(--warm)}table.journey .b5{background:var(--m)}
   table.journey td .st{color:var(--warm);font-weight:700}
   .brow{display:flex;align-items:center;margin:7px 0;font-size:11.5px}
   .brow .lb{flex:0 0 240px;color:#d9d9d9;font-weight:600}
@@ -129,7 +129,7 @@
     <div class="darrow">→</div>
     <div class="dcard"><span class="t">23:00 前</span><b>入睡 ≥7.5h</b>睡眠＝记忆巩固底线（闸门⑤硬指标）</div>
   </div>
-  <svg id="loop" viewBox="0 0 1120 190" width="1120" height="190" style="margin-top:14px"></svg>
+  <svg id="loop" viewBox="0 0 1120 220" width="100%" height="220" style="margin-top:14px"></svg>
 </div>
 
 <h2>图五 · 天数分配条形图<small>45 天都给了谁（合计 45 天对拍）</small></h2>
@@ -324,24 +324,23 @@ function attach(id){return document.getElementById(id);}
     svg.appendChild(el('text',{x:s.x+125,y:s.y+19,'text-anchor':'middle',fill:'#fff','font-size':12.5,'font-weight':700},s.t));
     svg.appendChild(el('text',{x:s.x+125,y:s.y+35,'text-anchor':'middle',fill:'#9ab0cc','font-size':9.5},s.s));
   });
-  function ar(x1,y1,x2,y2,c){svg.appendChild(el('path',{d:`M${x1},${y1} L${x2},${y2}`,stroke:c||'#7d97b8','stroke-width':2,fill:'none','marker-end':`url(#${c?'lg':'la'})`}));}
-  ar(310,52,430,52);           // ①→②
-  ar(680,52,800,52);           // ②→③
-  ar(925,74,925,130); ar(925,130,870,152); // ③→④ 折
+  function ar(d,c){svg.appendChild(el('path',{d,stroke:c||'#7d97b8','stroke-width':2,fill:'none','marker-end':`url(#${c?'lg':'la'})`}));}
+  ar('M310,52 H430');            // ①→②
+  ar('M680,52 H800');            // ②→③
+  ar('M925,74 V130 L870,152');   // ③→④ 直角折线（单线单箭头，不再半空断头）
   // ④ → 判定
   svg.appendChild(el('polygon',{points:'500,152 460,120 500,88 540,120',fill:'#102416',stroke:'#7ad98f','stroke-width':2}));
   svg.appendChild(el('text',{x:500,y:116,'text-anchor':'middle',fill:'#7ad98f','font-size':10.5,'font-weight':800},'>=80%?'));
   svg.appendChild(el('text',{x:500,y:132,'text-anchor':'middle',fill:'#7ad98f','font-size':8.5},'规范分不丢?'));
-  ar(620,152,540,120);
+  ar('M620,152 L540,120');
   // 是 → 点亮
   svg.appendChild(el('rect',{x:180,y:130,width:230,height:44,rx:10,fill:'#102416',stroke:'#7ad98f','stroke-width':1.6}));
   svg.appendChild(el('text',{x:295,y:149,'text-anchor':'middle',fill:'#7ad98f','font-size':12,'font-weight':700},'✓ 过关 · 树叶点亮'));
   svg.appendChild(el('text',{x:295,y:165,'text-anchor':'middle',fill:'#557a62','font-size':9.5},'记入错题本 → 下一章'));
-  ar(460,120,410,140,'#7ad98f');
-  // 否 → 回②
-  const bx=555+0, by=120+62;
-  svg.appendChild(el('path',{d:`M500,182 L500,205 L185,205 L185,74`,stroke:'#ffb020','stroke-width':1.3,fill:'none','stroke-dasharray':'4 3',opacity:.8,'marker-end':'url(#la)'}));
-  svg.appendChild(el('text',{x:330,y:198,fill:'#8f7a4a','font-size':9},'否：当日回补（例题组换同型再来一轮）→ 重测'));
+  ar('M460,120 L410,140','#7ad98f');
+  // 否 → 回②（从菱形底vertex出发，走底部通道，标签在通道上方）
+  svg.appendChild(el('path',{d:'M500,152 L500,205 L185,205 L185,74',stroke:'#ffb020','stroke-width':1.3,fill:'none','stroke-dasharray':'4 3',opacity:.8,'marker-end':'url(#la)'}));
+  svg.appendChild(el('text',{x:330,y:199,fill:'#c9973f','font-size':9,'font-weight':700},'否：当日回补（例题组换同型再来一轮）→ 重测'));
 })();
 
 /* ═══ 图6 阶梯 ═══ */
