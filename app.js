@@ -18,6 +18,7 @@ const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 40
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
+controls.autoRotate = true; // 默认缓转，勾选框可暂停
 controls.autoRotateSpeed = 0.9;
 
 scene.add(new THREE.HemisphereLight(0x9db4ff, 0x141824, 0.85));
@@ -140,6 +141,7 @@ function makeTile(el, isPh) {
 ELEMENTS.forEach(e => makeTile(e, false));
 PLACEHOLDERS.forEach(e => makeTile(e, true));
 window.__tiles = tiles; // 调试/测试句柄
+window.__controls = controls;
 
 /* ---------------- 三种排布 ---------------- */
 const SP = 1.15;
