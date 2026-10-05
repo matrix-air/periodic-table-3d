@@ -7,14 +7,14 @@ import { ELEMENTS, CATS } from './data/elements.js';
 const container = document.getElementById('scene');
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setSize(innerWidth, innerHeight);
+renderer.setSize(container.clientWidth || innerWidth, container.clientHeight || innerHeight);
 container.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x070b16);
-scene.fog = new THREE.Fog(0x070b16, 55, 130);
+scene.background = new THREE.Color(0x0c1310);
+scene.fog = new THREE.Fog(0x0c1310, 55, 130);
 
-const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 400);
+const camera = new THREE.PerspectiveCamera(45, (container.clientWidth || 16) / (container.clientHeight || 9), 0.1, 400);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
@@ -40,7 +40,7 @@ scene.add(dir2);
   }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0x33406e, size: 0.14, sizeAttenuation: true })));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0x2e4034, size: 0.14, sizeAttenuation: true })));
 }
 
 /* ---------------- 属性与工具 ---------------- */
@@ -297,6 +297,11 @@ renderer.domElement.addEventListener('pointerup', ev => {
 /* ---------------- 详情面板 ---------------- */
 const panel = document.getElementById('panel');
 const panelBody = document.getElementById('panelBody');
+// 纸面面板上的分区文字色（亮色瓦片色的深色变体，保证米纸底上可读）
+const CAT_INK = {
+  alkali: '#b03030', alkm: '#a05a10', trans: '#8a6d00', lanth: '#8a3fb0', act: '#7a2fa8',
+  post: '#1f7a3d', metalloid: '#0f7a5e', non: '#1668b0', halogen: '#0e7d8c', noble: '#5b32c0',
+};
 const BLOCK = e => {
   if (e.cat === 'lanth' || e.cat === 'act') return 'f';
   if ([1, 2, 3, 4, 11, 12, 19, 20, 37, 38, 55, 56, 87, 88].includes(e.z)) return 's';
@@ -315,7 +320,7 @@ function showPanel(t) {
       </dl>
       <div class="note dim2">${e.desc}</div>`;
   } else {
-    const col = '#' + new THREE.Color(catColor(e)).getHexString();
+    const col = CAT_INK[e.cat] || '#' + new THREE.Color(catColor(e)).getHexString();
     const yr = e.yr === -1 ? '古代' : e.yr + ' 年';
     const grp = e.g === null ? 'ⅢB（f 区）' : `第 ${e.g} 族`;
     const rows = [
@@ -439,9 +444,9 @@ addEventListener('keydown', ev => { if (ev.key === 'Escape') closeSheet(); });
 
 /* ---------------- 主循环 ---------------- */
 addEventListener('resize', () => {
-  camera.aspect = innerWidth / innerHeight;
+  camera.aspect = (container.clientWidth || 16) / (container.clientHeight || 9);
   camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
+  renderer.setSize(container.clientWidth, container.clientHeight);
 });
 let pulseT = null;
 rebuild();

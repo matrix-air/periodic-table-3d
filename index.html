@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>45天化学冲刺 · 三维修炼站</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20261005c">
 <script type="importmap">
 {
   "imports": {
@@ -15,66 +15,78 @@
 </script>
 </head>
 <body>
-  <div id="scene"></div>
-  <div id="loading">正在构建三维模型…</div>
-
-  <header>
-    <h1>45天化学冲刺 <em>三维修炼站</em></h1>
-    <p class="sub">三维元素周期表（背景板）× 打怪修炼场 × 冲刺结构树 × 图表沙盘 —— 1869 门捷列夫 → 2026 · 118 种元素</p>
-  </header>
-
-  <div id="toolbar">
-    <div class="row" id="viewRow">
-      <button class="btn view active" data-view="classic">经典立体</button>
-      <button class="btn view" data-view="rings">周期环塔</button>
-      <button class="btn view" data-view="helix">序数螺旋</button>
+  <nav class="topnav">
+    <div class="brand">
+      <div class="mark">化</div>
+      <div class="bt"><b>45天化学冲刺</b><span>三维修炼站 · 让周期表立起来</span></div>
     </div>
-    <div class="row" id="propRow">
-      <span class="lbl">高度映射</span>
-      <select id="propSel">
-        <option value="flat">平整</option>
-        <option value="rad" selected>原子半径（共价）</option>
-        <option value="eneg">电负性</option>
-        <option value="ie1">第一电离能</option>
-        <option value="mass">原子质量</option>
-      </select>
+    <div class="navlinks">
+      <button class="navlink" id="treeBtn" title="结构内容做前景，周期表做背景板">冲刺结构树</button>
+      <button class="navlink" id="chartsBtn" title="甘特 · 流程 · 节律 · 分配六张图">图表沙盘</button>
+      <a class="cta" href="./arena.html" target="_blank" rel="noopener">进入修炼场 ↗</a>
     </div>
-    <div class="row">
-      <label class="chk"><input type="checkbox" id="histChk"><span>1869 已知视角</span></label>
-      <label class="chk"><input type="checkbox" id="rotChk" checked><span>自动旋转</span></label>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <div class="kicker"><i>●</i> CHEMISTRY SPRINT · 45 DAYS <span>三维修炼站</span></div>
+      <h1>把整册化学，<em>立起来看。</em></h1>
+      <p class="sub">三维元素周期表做背景板——经典立体 / 周期环塔 / 序数螺旋三种形态，半径与电负性的周期起伏一目了然；修炼场、结构树、图表沙盘三版一体。</p>
     </div>
-    <div class="row">
-      <input id="search" type="text" placeholder="搜索：符号 / 中文名 / 序数" autocomplete="off">
+
+    <div id="toolbar">
+      <div class="row" id="viewRow">
+        <button class="btn view active" data-view="classic">经典立体</button>
+        <button class="btn view" data-view="rings">周期环塔</button>
+        <button class="btn view" data-view="helix">序数螺旋</button>
+      </div>
+      <div class="row" id="propRow">
+        <label class="lbl" for="propSel">高度映射</label>
+        <select id="propSel">
+          <option value="flat">平整</option>
+          <option value="rad" selected>原子半径（共价）</option>
+          <option value="eneg">电负性</option>
+          <option value="ie1">第一电离能</option>
+          <option value="mass">原子质量</option>
+        </select>
+      </div>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="histChk"><span>1869 已知视角</span></label>
+        <label class="chk"><input type="checkbox" id="rotChk" checked><span>自动旋转</span></label>
+      </div>
+      <div class="row grow">
+        <input id="search" type="text" placeholder="搜索：符号 / 中文名 / 序数" autocomplete="off">
+      </div>
+      <div class="row">
+        <button class="btn" id="resetBtn">重置视角</button>
+        <button class="btn" id="glbBtn">导出 GLB</button>
+      </div>
     </div>
-    <div class="row">
-      <button class="btn" id="resetBtn">重置视角</button>
-      <button class="btn" id="glbBtn">导出 GLB 模型</button>
-      <a class="btn gold" href="./arena.html" target="_blank" rel="noopener" title="45 天化学修炼场 · 打怪升级版">⚔️ 45 天修炼场</a>
-      <button class="btn gold" id="treeBtn" title="45 天化学冲刺结构树（周期表作背景板）">📜 冲刺结构树</button>
-      <button class="btn gold" id="chartsBtn" title="45 天冲刺 · 图表与流程地图（周期表作背景板）">📊 图表沙盘</button>
+
+    <div class="frame">
+      <div id="scene"></div>
+      <div id="loading">正在构建三维模型…</div>
+      <div id="legend"></div>
+      <div class="frame-hint">拖拽旋转 · 滚轮缩放 · 点击元素看详情</div>
+      <aside id="panel" class="hidden">
+        <button id="panelClose" aria-label="关闭">×</button>
+        <div id="panelBody"></div>
+      </aside>
     </div>
-  </div>
 
-  <div id="legend"></div>
+    <footer class="pagefoot">
+      <span>数据口径：IUPAC 原子量（2021）· Cordero 2008 共价半径 · 泡令电负性；104 号起多为预测值</span>
+      <span class="r">1869 门捷列夫 → 2026 · 118 种元素 · 三种立体形态</span>
+    </footer>
+  </main>
 
-  <aside id="panel" class="hidden">
-    <button id="panelClose" aria-label="关闭">×</button>
-    <div id="panelBody"></div>
-  </aside>
-
-  <footer>
-    拖拽旋转 · 滚轮缩放 · 右键平移 · 点击元素看详情
-    <span class="src">数据口径：IUPAC 原子量（2021）· Cordero 2008 共价半径 · 泡令电负性；104 号起多为预测值</span>
-  </footer>
-
-  <div id="toast" class="hidden"></div>
-
-  <!-- 结构内容叠加层：周期表做背景板 -->
   <div id="sheet">
     <button id="sheetClose" title="收起（Esc）">×</button>
     <div class="wrap"><iframe id="sheetFrame" src="about:blank" title="45 天冲刺结构内容"></iframe></div>
   </div>
 
-  <script type="module" src="app.js"></script>
+  <div id="toast" class="hidden"></div>
+
+  <script type="module" src="app.js?v=20261005c"></script>
 </body>
 </html>
