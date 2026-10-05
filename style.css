@@ -52,6 +52,12 @@ header .sub { margin-top: 7px; font-size: 12.5px; color: var(--dim); letter-spac
   background: rgba(255, 212, 59, .16); color: var(--accent);
   border-color: rgba(255, 212, 59, .5); font-weight: 700;
 }
+a.btn { text-decoration: none; display: inline-block; }
+.btn.gold {
+  background: rgba(240, 192, 96, .14); color: #f0c060;
+  border-color: rgba(240, 192, 96, .5); font-weight: 700;
+}
+.btn.gold:hover { border-color: #f0c060; box-shadow: 0 0 12px rgba(240, 192, 96, .25); }
 #propSel { appearance: none; -webkit-appearance: none; padding-right: 26px; outline: none;
   background-image: linear-gradient(45deg, transparent 50%, var(--dim) 50%), linear-gradient(135deg, var(--dim) 50%, transparent 50%);
   background-position: calc(100% - 15px) 55%, calc(100% - 10px) 55%;

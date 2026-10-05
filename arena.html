@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>45天化学修炼场 · 打怪升级版（如数家珍 → 庖丁解牛 → 融会贯通 → 炉火纯青 → 妙笔生花 → 执笔点睛）</title>
+<style>
+  :root{--bg:#0f0d13;--panel:#181522;--line:#3a3350;--txt:#e8e4f0;--dim:#9c93b5;
+        --gold:#f0c060;--hp:#e05050;--xp:#58c0e0;--ok:#7ad98f;--m:#ff7ad9;--p:#6fb6ff;--c:#b29aff;--warm:#ffb020;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei",sans-serif;width:1200px;padding:28px 34px 60px;margin:0 auto;
+       background-image:radial-gradient(ellipse at 50% -10%, #1d1830 0%, var(--bg) 55%)}
+  h1{font-size:25px;color:#fff;text-shadow:0 0 18px rgba(240,192,96,.35)}
+  h1 .v{color:var(--gold);font-size:13.5px;vertical-align:middle;margin-left:10px;text-shadow:none}
+  .meta{color:var(--dim);font-size:12px;margin:10px 0 16px;line-height:1.75}
+  .meta b{color:#e8e4f0}
+  h2{font-size:16px;color:var(--gold);margin:32px 0 6px;font-weight:800;letter-spacing:.5px}
+  h2 small{font-size:11.5px;color:var(--dim);font-weight:400;margin-left:10px;letter-spacing:0}
+  .sub{font-size:11.5px;color:var(--dim);margin-bottom:10px;line-height:1.7}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:8px;box-shadow:0 2px 14px rgba(0,0,0,.35)}
+  svg{display:block}
+  svg text{font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+  /* 玩家状态栏 */
+  .hud{display:flex;gap:12px;align-items:stretch;margin-top:14px}
+  .avatar{flex:0 0 96px;background:linear-gradient(160deg,#2a2140,#181522);border:2px solid var(--gold);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(240,192,96,.2)}
+  .avatar .face{font-size:34px}
+  .avatar .ttl{font-size:10px;color:var(--gold);font-weight:700;margin-top:4px;text-align:center;line-height:1.4}
+  .hudinfo{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:11.5px;line-height:1.8}
+  .barline{display:flex;align-items:center;gap:8px;margin:3px 0}
+  .barline .k{flex:0 0 74px;color:var(--dim)}
+  .bar{flex:1;height:13px;background:#0d0b12;border:1px solid #2c2440;border-radius:7px;overflow:hidden;position:relative}
+  .bar .fill{height:100%;border-radius:6px}
+  .bar .fill.xp{background:linear-gradient(90deg,#2a7ca0,var(--xp))}
+  .bar .fill.hp{background:linear-gradient(90deg,#8a3030,var(--hp))}
+  .barline .v{flex:0 0 auto;color:var(--dim);font-size:10.5px}
+  /* 称号阶梯 */
+  .ranks{display:flex;gap:6px;margin-top:8px;align-items:flex-end}
+  .rank{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 6px;text-align:center;font-size:10.5px;line-height:1.5;position:relative}
+  .rank .lv{color:var(--gold);font-weight:800;font-size:12px}
+  .rank .nm{color:#fff;font-weight:700;font-size:11.5px}
+  .rank .hw{color:var(--dim);font-size:9.5px}
+  .rank.final{border-color:#ff5f5f;box-shadow:0 0 12px rgba(255,95,95,.25)}
+  .rank::after{content:'▸';position:absolute;right:-9px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:11px}
+  .rank:last-child::after{content:''}
+  /* 副本幕卡 */
+  .zone{margin:14px 0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .zhead{padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .zhead .zn{font-size:15.5px;font-weight:800;color:#141414;padding:3px 14px;border-radius:8px}
+  .zhead .zt{color:#fff;font-size:12px}
+  .zhead .zd{color:var(--gold);font-size:11.5px;font-weight:700}
+  .zhead .zl{color:var(--dim);font-size:11px;margin-left:auto}
+  .zbody{padding:10px 14px 14px;background:#14111d}
+  .zgoal{font-size:11.5px;color:#d5cfe6;line-height:1.8;margin-bottom:8px}
+  .zgoal b{color:var(--gold)}
+  .mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .mcard{background:var(--panel);border:1px solid #322a4a;border-radius:10px;padding:8px 10px;font-size:10.5px;line-height:1.6;position:relative}
+  .mcard.boss{border-color:var(--gold);box-shadow:0 0 10px rgba(240,192,96,.18)}
+  .mcard.elite{border-color:#c88a3a}
+  .mcard .mn{font-size:12.5px;font-weight:800;color:#fff}
+  .mcard .mn .tag{font-size:9px;color:#141414;border-radius:4px;padding:1px 5px;margin-left:6px;font-weight:800;vertical-align:1px}
+  .tag.b{background:var(--gold)} .tag.e{background:#e8a04c} .tag.m{background:#8fa8c8}
+  .mcard .msrc{color:var(--dim);font-size:9.8px;margin:1px 0 4px}
+  .hpbar{display:flex;align-items:center;gap:5px;margin:2px 0}
+  .hpbar .hk{color:var(--hp);font-weight:800;font-size:9px}
+  .hpbar .hb{flex:1;height:8px;background:#0d0b12;border-radius:4px;overflow:hidden;border:1px solid #2c2440}
+  .hpbar .hf{height:100%;background:linear-gradient(90deg,#8a3030,var(--hp));border-radius:4px}
+  .hpbar .hv{color:var(--hp);font-size:9px;font-weight:700}
+  .atk{color:var(--warm);font-size:9.5px}
+  .weak{color:#9fd0ff;font-size:9.8px}
+  .weak b{color:#9fd0ff}
+  .drop{color:var(--ok);font-size:9.8px}
+  .drop b{color:var(--ok)}
+  .zgate{margin-top:10px;background:#102416;border:1px solid #1f5c38;color:var(--ok);border-radius:9px;padding:7px 12px;font-size:11px;line-height:1.7}
+  .zgate b{color:#a8f0b8}
+  /* 打怪交互状态 */
+  .mcard{cursor:pointer;transition:transform .12s, border-color .2s, opacity .2s;user-select:none}
+  .mcard:hover{transform:translateY(-2px);border-color:#6a5f8a}
+  .mcard.wounded{border-color:#e8a04c;background:#1d1810}
+  .mcard.wounded .hf{background:linear-gradient(90deg,#8a6a20,#e8a04c)}
+  .mcard.dead{opacity:.55;border-color:#2a5c3a}
+  .mcard.dead .mn{text-decoration:line-through;color:#9fb8a8}
+  .mcard.dead .hf{background:linear-gradient(90deg,#2a6a3a,#7ad98f)}
+  .mcard .stamp{position:absolute;top:6px;right:8px;font-size:13px;font-weight:900;color:#7ad98f;display:none}
+  .mcard.dead .stamp{display:block;content:'✓'}
+  .zhead .clearbadge{display:none;background:#102416;border:1px solid #1f5c38;color:#7ad98f;border-radius:6px;padding:2px 10px;font-size:10.5px;font-weight:800}
+  .zone.cleared .clearbadge{display:inline-block}
+  .zone.cleared .zn{box-shadow:0 0 10px rgba(122,217,143,.5)}
+  .hudbtns{display:flex;gap:8px;align-items:center;margin-left:10px}
+  .hudbtns button{background:#221c36;border:1px solid #4a3f6a;color:#cfc6e8;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer}
+  .hudbtns button:hover{border-color:var(--gold);color:var(--gold)}
+  .mcard .statustip{position:absolute;bottom:5px;right:8px;font-size:8.5px;color:#5a5270}
+  /* 装备库 */
+  .gear{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .gcard{background:linear-gradient(165deg,#221c36,#181522);border:1px solid #4a3f6a;border-radius:10px;padding:8px 10px;font-size:10.5px;line-height:1.55}
+  .gcard .gn{font-size:12px;font-weight:800;color:var(--gold)}
+  .gcard .gf{color:var(--dim);font-size:9.5px;margin:1px 0 3px}
+  .gcard .ge{color:#cfc6e8;font-size:10px}
+  /* 日常任务 */
+  .quest{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .qcard{background:var(--panel);border:1px dashed #4a3f6a;border-radius:10px;padding:8px 10px;font-size:10.5px;line-height:1.6}
+  .qcard .qt{font-weight:800;color:#fff;font-size:11.5px}
+  .qcard .qr{color:var(--xp);font-size:9.8px;font-weight:700;margin-top:3px}
+  .flow{display:flex;gap:6px;align-items:stretch;margin-top:6px}
+  .fstep{flex:1;background:var(--panel);border:1px solid #3a3350;border-top:3px solid var(--p);border-radius:9px;padding:8px;font-size:10.5px;line-height:1.55}
+  .fstep b{display:block;color:#fff;font-size:11.5px;margin-bottom:2px}
+  .fstep .fs{color:var(--gold);font-size:10px;font-weight:800;display:block;margin-bottom:3px}
+  .fstep.win{border-top-color:var(--ok)} .fstep.fail{border-top-color:var(--hp)}
+  .farrow{align-self:center;color:var(--dim)}
+  .foot{margin-top:34px;border-top:1px solid #262626;padding-top:12px;color:var(--dim);font-size:11.5px;line-height:1.9}
+</style>
+</head>
+<body>
+<a href="./index.html" title="回到 3D 元素周期表" style="position:fixed;top:14px;right:16px;z-index:9;background:#221c36;border:1px solid #4a3f6a;color:#cfc6e8;border-radius:8px;padding:6px 13px;font-size:11.5px;text-decoration:none"
+   onmouseover="this.style.borderColor='#f0c060';this.style.color='#f0c060'" onmouseout="this.style.borderColor='#4a3f6a';this.style.color='#cfc6e8'">⤺ 3D 元素周期表</a>
+<h1>⚗️ 45天化学修炼场<span class="v">打怪升级版 · 与《45天化学冲刺结构树.html》《图表流程图.html》同源数据 · 2026 口径</span></h1>
+<div class="meta">
+  规则一句话：<b>知识=怪物（血量HP=节/课题数，攻击ATK=★高考权重），解题方法=技能装备，章节过关=击杀，阶段闸门=守关BOSS，45天走完六片地图=D45 终焉之战执笔点睛。</b>怪物图鉴与结构树逐叶同源：初中 11 单元（新手村）＋高中 10 簇 19 章 55 节（三大副本）＋三大融合兽＋五座竞技场镜像巨像。
+</div>
+
+<!-- 玩家状态栏 -->
+<div class="hud">
+  <div class="avatar"><div class="face">🧪</div><div class="ttl" id="avrank">见习炼金士<br>→ 执笔剑圣</div></div>
+  <div class="hudinfo">
+    <div class="barline"><div class="k">经验 XP</div><div class="bar"><div class="fill xp" style="width:2%"></div></div><div class="v">每日 5XP 起步：主学习+3 · 记忆窗口+1 · 击杀确认+2/章（自测≥80%）· BOSS战胜利+10</div></div>
+    <div class="barline"><div class="k">清版进度</div><div class="bar"><div class="fill hp" id="killbar" style="width:0%;background:linear-gradient(90deg,#2a6a3a,#7ad98f)"></div></div><div class="v" id="killnum">已击杀 0 / 39（红=满血待战 · 黄=残血再战 · 绿=已击杀）</div></div>
+    <div class="barline"><div class="k">当前称号</div><div class="bar"><div class="fill" id="rankbar" style="width:0%;background:linear-gradient(90deg,#8a6a20,#f0c060)"></div></div><div class="v" id="rankname">LV0 见习炼金士（点怪升级，点击怪物卡循环：满血→残血→击杀）</div></div>
+    <div class="barline"><div class="k">装备栏</div><div class="bar"><div class="fill" style="width:0%"></div></div><div class="v">开局空手，技能全靠打怪掉落——不肝不氪，只肝化学</div></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:5px">
+      <span style="color:var(--dim);font-size:10.5px">升级不靠在线时长靠"击杀确认"：闭卷自测 ≥80% 才算真击杀（防"看懂了"幻觉）——对应结构树"测试效应"闸门。进度自动存档于本机。</span>
+      <span class="hudbtns"><button onclick="resetSave()">↺ 重置存档</button><button onclick="markAllCleared()">⚡ 演示满级（慎点）</button></span>
+    </div>
+  </div>
+</div>
+
+<!-- 称号阶梯 -->
+<h2>📜 升级路线 · 七级称号<small>每过一道守关闸门=解锁新称号；称号即掌控感，D45 满级</small></h2>
+<div class="panel"><div class="ranks" id="ranks"></div></div>
+
+<!-- 世界地图 -->
+<h2>🗺️ 世界地图 · 六片区域<small>节点：●小怪 ▲精英 ★BOSS ☠终焉 —— 悬停看地形说明；当前进度从「侦察营地」出发</small></h2>
+<div class="panel"><svg id="map" viewBox="0 0 1120 240" width="1120" height="240"></svg>
+<div class="sub" style="margin-top:8px">地图规则：主线强制顺序（与结构树日程一致），区域内地怪可自选顺序（自主感设计）；守关闸门不过，不解锁下一区域。</div>
+</div>
+
+<!-- 副本区 -->
+<h2>⚔️ 六片地图 · 怪物图鉴<small>HP=节数/课题数 · ATK=★权重 · 弱点=破怪技能 · 掉落=装备卡（技能）——金色边框=守关BOSS，橙色=精英</small></h2>
+<div id="zones"></div>
+
+<!-- 战斗流程 -->
+<h2>🕹️ 战斗流程 · 每只怪的打法<small>与结构树"每章三步闭环"同构，游戏化外壳</small></h2>
+<div class="panel">
+  <div class="flow">
+    <div class="fstep"><span class="fs">STEP 1 · 侦查</span><b>前置篇侦察（15–30min）</b>初中红叶=小怪残血先行清剿，摸清怪物属性（这一簇初中学过什么）</div>
+    <div class="farrow">→</div>
+    <div class="fstep"><span class="fs">STEP 2 · 出招</span><b>精讲要点＋例题组</b>先学技能再实战：例题组 85% 难度校准（太高换低阶怪，太低挑战精英）＋固定带 1 道实验暗影</div>
+    <div class="farrow">→</div>
+    <div class="fstep"><span class="fs">STEP 3 · 必杀判定</span><b>闭卷自测 ≥80%</b>不看书的击杀才是击杀；规范分（条件/状态/符号）算暴击</div>
+    <div class="farrow">→</div>
+    <div class="fstep win"><span class="fs">✔ 击杀</span><b>掉落＋点亮</b>装备入库（技能卡）· 树叶点亮变绿 · 错题残片入册（战利品=错题本）</div>
+    <div class="farrow">｜</div>
+    <div class="fstep fail"><span class="fs">✘ 残血（黄标）</span><b>明日再战</b>当日回补：同型例题再来一轮→重测；不跳怪、不弃地图（闸门必须真过）</div>
+  </div>
+</div>
+
+<!-- 装备库 -->
+<h2>🎒 装备库 · 技能卡<small>全部由击杀掉落，对应结构树各章"✎任务要点"</small></h2>
+<div class="panel"><div class="gear" id="gear"></div></div>
+
+<!-- 日常任务 -->
+<h2>📋 日常任务板<small>每天刷新 · 全程固定（降低决策损耗，习惯接管执行）</small></h2>
+<div class="panel"><div class="quest">
+  <div class="qcard"><div class="qt">🌅 晨间记忆（07:00–07:30）</div>方程式/元素符号/口诀卡片按间隔重复调度复训<div class="qr">奖励：XP+1 · 记忆护盾（抗遗忘）</div></div>
+  <div class="qcard"><div class="qt">⚔️ 主线战斗（08:00–16:30）</div>当日怪物：侦查→出招→必杀（详见战斗流程）<div class="qr">奖励：XP+3 · 装备掉落</div></div>
+  <div class="qcard"><div class="qt">🌙 复盘仪式（19:30–20:15）</div>记忆窗口②＋AI考官归因对话＋树叶点亮＋明日 if-then<div class="qr">奖励：XP+1 · 明日 buff（计划明确）</div></div>
+  <div class="qcard"><div class="qt">💤 睡眠结界（23:00 前）</div>≥7.5h——记忆巩固的硬闸门，熬夜=给怪物回血<div class="qr">奖励：HP/XP 结算保存（存档）</div></div>
+</div></div>
+
+<div class="foot">
+  三版一体：《45天化学冲刺结构树.html》（逐叶明细=攻略本）·《45天化学冲刺-图表流程图.html》（甘特/流程图=作战沙盘）· 本页（打怪升级=游戏化执行层）｜ 依据：《AI论文调研-45天冲刺可行性.md》《心理学调研-结构设计依据.md》（游戏化内核全部落在已核验理论上：击杀确认=测试效应 · 称号=胜任感叙事 · 自选顺序=自主感 · 闸门=形成性评价 · XP条=进步可见）｜ 2026-10-05 · Aurora
+</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;return e;}
+
+/* ═══ 称号阶梯 ═══ */
+const RANKS=[
+ {lv:'LV0',nm:'见习炼金士',hw:'D1 入营·领取地图'},
+ {lv:'LV1',nm:'地图持有者',hw:'闸①：全图三色（侦察毕业）'},
+ {lv:'LV2',nm:'解牛剑客',hw:'闸②：★★★章全击杀≥80%'},
+ {lv:'LV3',nm:'织网法师',hw:'闸③：三大融合兽击破'},
+ {lv:'LV4',nm:'淬火战神',hw:'闸④：五座镜像巨像·曲线企稳'},
+ {lv:'LV5',nm:'点金诗人',hw:'闸⑤：一页纸+睡眠结界×3'},
+ {lv:'MAX',nm:'执笔剑圣',hw:'D45 终焉之战·执笔点睛',final:1},
+];
+document.getElementById('ranks').innerHTML=RANKS.map(r=>
+ `<div class="rank${r.final?' final':''}"><div class="lv">${r.lv}</div><div class="nm">${r.nm}</div><div class="hw">${r.hw}</div></div>`).join('');
+
+/* ═══ 世界地图 ═══ */
+(function(){
+  const svg=document.getElementById('map');
+  svg.appendChild(el('defs',{})).innerHTML='<marker id="mp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6a5f8a"/></marker>';
+  const zones=[
+    {n:'侦察营地',d:'D1–5',c:'#6fb6ff',x:70},
+    {n:'拆解峡谷',d:'D6–20',c:'#7ad98f',x:290},
+    {n:'融合圣殿',d:'D21–32',c:'#b29aff',x:510},
+    {n:'熔炉战场',d:'D33–41',c:'#ffb020',x:730},
+    {n:'巅峰之塔',d:'D42–44',c:'#ff7ad9',x:950},
+    {n:'终焉之巅',d:'D45',c:'#ff5f5f',x:1070},
+  ];
+  const y=120;
+  // 区域地面
+  zones.forEach((z,i)=>{
+    const w=i===zones.length-1?60:200;
+    svg.appendChild(el('rect',{x:z.x-40,y:y-46,width:w,height:96,rx:14,fill:z.c,opacity:.10}));
+    svg.appendChild(el('rect',{x:z.x-40,y:y-46,width:w,height:96,rx:14,fill:'none',stroke:z.c,'stroke-width':1.4,opacity:.5}));
+    svg.appendChild(el('text',{x:z.x-40+w/2,y:y+44,'text-anchor':'middle',fill:z.c,'font-size':11,'font-weight':800},z.n));
+    svg.appendChild(el('text',{x:z.x-40+w/2,y:y+58,'text-anchor':'middle',fill:z.c,'font-size':9,opacity:.8},z.d));
+  });
+  // 主线路径
+  let d=`M${zones[0].x},${y}`;
+  zones.slice(1).forEach((z,i)=>{ d+=` C${(zones[i].x+z.x)/2},${y-38-(i%2)*0} ${(zones[i].x+z.x)/2},${y+38} ${z.x},${y}`; });
+  svg.appendChild(el('path',{d,stroke:'#6a5f8a','stroke-width':2.5,fill:'none','stroke-dasharray':'6 5','marker-end':'url(#mp)'}));
+  // 节点：小怪● 精英▲ BOSS★ 终焉☠
+  const nodes=[
+    {x:70,y,t:'spawn',l:'出生点',tip:'D1 启动仪式+诊断卷——领取全图'},
+    {x:135,y:y-16,t:'m',l:'新手村',tip:'初中11单元小怪群（三色侦察，D1–5）'},
+    {x:200,y:y+14,t:'g',l:'闸①',tip:'守关：全图三色完成+基线落档'},
+    {x:290,y,t:'g2',l:'工具铺',tip:'D6–7 物质的量+氧化还原：先取武器（守恒三板斧）'},
+    {x:352,y:y-18,t:'e',l:'位构蛇',tip:'D8–9 位构性三头蛇+结构三幻影'},
+    {x:414,y:y+12,t:'e',l:'元素兽',tip:'D10–11 钠氯双子/铁三角/硫氮双翼'},
+    {x:476,y:y-10,t:'b',l:'原理龙',tip:'D12–16 平衡巨龙·九头蛇·雷神（最难区）'},
+    {x:545,y:y+10,t:'e',l:'有机兽',tip:'D17–20 有机看门人→官能团百变魔王'},
+    {x:610,y,t:'g',l:'闸②',tip:'守关：★★★章自测≥80%+红叶70%'},
+    {x:675,y:y-14,t:'b',l:'融合兽',tip:'D21–31 工厂泰坦·真相审判者·迷宫兽'},
+    {x:740,y:y+14,t:'g',l:'闸③',tip:'守关：专题卷≥75%+二错率<20%+重绘全图'},
+    {x:805,y,t:'a',l:'竞技场',tip:'D33–41 五座镜像巨像（全真模拟×5+归因×4）'},
+    {x:870,y:y-12,t:'g',l:'闸④',tip:'守关：曲线浮动<10%+策略卡定稿'},
+    {x:935,y:y+12,t:'t',l:'塔顶',tip:'D42–44 一页纸+手感卷+睡眠结界'},
+    {x:1000,y,t:'g',l:'闸⑤',tip:'守关：一页纸过完+睡眠3晚≥7.5h'},
+    {x:1070,y,t:'x',l:'终焉',tip:'D45 执笔点睛：轻仪式+预演+进场'},
+  ];
+  nodes.forEach(n=>{
+    let s='';
+    if(n.t==='m'||n.t==='spawn') s=el('circle',{cx:n.x,cy:n.y,r:9,fill:'#8fa8c8',stroke:'#0f0d13','stroke-width':2});
+    else if(n.t==='e') s=el('polygon',{points:`${n.x},${n.y-10} ${n.x+10},${n.y+8} ${n.x-10},${n.y+8}`,fill:'#e8a04c',stroke:'#0f0d13','stroke-width':2});
+    else if(n.t==='b') s=el('polygon',{points:`${n.x},${n.y-12} ${n.x+11},${n.y-4} ${n.x+7},${n.y+10} ${n.x-7},${n.y+10} ${n.x-11},${n.y-4}`,fill:'#f0c060',stroke:'#0f0d13','stroke-width':2});
+    else if(n.t==='g'||n.t==='g2') s=el('rect',{x:n.x-8,y:n.y-8,width:16,height:16,rx:3,transform:`rotate(45 ${n.x} ${n.y})`,fill:'#7ad98f',stroke:'#0f0d13','stroke-width':2});
+    else if(n.t==='a') s=el('circle',{cx:n.x,cy:n.y,r:11,fill:'none',stroke:'#ffb020','stroke-width':3});
+    else if(n.t==='t') s=el('rect',{x:n.x-9,y:n.y-9,width:18,height:18,rx:4,fill:'#ff7ad9',stroke:'#0f0d13','stroke-width':2});
+    else if(n.t==='x') s=el('circle',{cx:n.x,cy:n.y,r:13,fill:'#ff5f5f',stroke:'#fff','stroke-width':2});
+    const tip=el('title',{},n.l+' · '+n.tip);
+    s.appendChild(tip);
+    svg.appendChild(s);
+    svg.appendChild(el('text',{x:n.x,y:n.y+28,'text-anchor':'middle',fill:'#cfc6e8','font-size':9.5,'font-weight':700},n.l));
+  });
+  // 图例
+  svg.appendChild(el('text',{x:16,y:20,fill:'#9c93b5','font-size':10},'图例：●小怪/出生点 ▲精英 ★BOSS ◆闸门 ○竞技场 ■塔顶 ☠终焉 —— 悬停任意节点看地形说明'));
+})();
+
+/* ═══ 六片地图 · 怪物图鉴（数据驱动） ═══ */
+const ZONES=[
+ {n:'第一幕 · 侦察营地',zn:'如数家珍',d:'D1–5',c:'#6fb6ff',lv:'通关→LV1 地图持有者',
+  goal:'不杀怪，先侦察：把全部怪物照面——<b>全图三色标注</b>（红=满血凶悍/黄=残血可欺/绿=其实已死），领<b>侦察之眼</b>装备。',
+  gate:'守关闸①：全图三色完成 ｜ 诊断卷基线落档 ｜ 用语摸底（方程式30题：没武器别空手进峡谷）｜ AI 出《怪物优先级悬赏令》——红怪+★★★★优先击杀',
+  mons:[
+   {n:'变形史莱姆',src:'初中一单元 · D2',hp:2,atk:'★',tier:'m',weak:'物理变化 vs 化学变化一键分辨',drop:'侦察之眼Ⅰ'},
+   {n:'空气双子·氧气兽',src:'初中二单元 · D3',hp:3,atk:'★',tier:'m',weak:'空气成分/氧气制取两法',drop:'侦察之眼Ⅰ'},
+   {n:'微粒三兄弟',src:'初中三单元 · D2',hp:3,atk:'★',tier:'m',weak:'分子/原子/离子辨析',drop:'侦察之眼Ⅰ'},
+   {n:'水之守护·化合价傀儡',src:'初中四单元 · D2',hp:3,atk:'★',tier:'m',weak:'化学式书写·化合价口诀',drop:'侦察之眼Ⅰ'},
+   {n:'守恒傀儡·方程式骷髅',src:'初中五单元 · D4',hp:2,atk:'★★',tier:'m',weak:'质量守恒配平',drop:'侦察之眼Ⅰ'},
+   {n:'碳魔像',src:'初中六单元 · D3',hp:3,atk:'★',tier:'m',weak:'CO/CO₂ 转化三角',drop:'侦察之眼Ⅰ'},
+   {n:'燃焰犬·能源妖',src:'初中七单元 · D4',hp:2,atk:'★',tier:'m',weak:'燃烧三要素/化石能源',drop:'侦察之眼Ⅰ'},
+   {n:'金属骑士团',src:'初中八单元 · D4',hp:3,atk:'★★',tier:'e',weak:'活动性顺序链式推理',drop:'侦察之眼Ⅱ'},
+   {n:'溶解海妖',src:'初中九单元 · D4',hp:3,atk:'★★',tier:'m',weak:'溶解度曲线读图',drop:'侦察之眼Ⅰ'},
+   {n:'酸碱盐三巨头',src:'初中十单元 · D4',hp:3,atk:'★★★',tier:'b',weak:'复分解条件/中和反应',drop:'【侦察之眼Ⅲ】+ 新手村毕业'},
+   {n:'营养贤者·材料傀儡',src:'初中十一单元 · D5',hp:2,atk:'★',tier:'m',weak:'营养素六类/合成材料',drop:'侦察之眼Ⅰ'},
+   {n:'⑩ 暗影守望者',src:'实验探究簇 · D2 预热',hp:5,atk:'★',atkNote:'全程潜伏',tier:'e',weak:'五环节地图：分离→制备→检验→定量→评价',drop:'【暗影图鉴】（D6–20 每战 +1 道实验暗影）'},
+  ]},
+ {n:'第二幕 · 拆解峡谷',zn:'庖丁解牛',d:'D6–20',c:'#7ad98f',lv:'通关→LV2 解牛剑客',
+  goal:'主战场：先取武器（两大工具），再逐区清怪——<b>每怪三步打法（侦查→出招→必杀）</b>，★★★以上必杀线 80%。',
+  gate:'守关闸②：★★★及以上章闭卷自测 ≥80% ｜ 初中红怪清剿 ≥70% ｜ 错题残片册建立 —— 不过不进圣殿',
+  mons:[
+   {n:'四桥测量师',src:'① 物质的量簇 · 必一2.3 · D6',hp:1,atk:'★★★',tier:'e',weak:'NA/M/Vm/c 四座桥换算链',drop:'【四桥罗盘】（一切计算怪的先手武器）'},
+   {n:'电子窃贼',src:'② 氧化还原簇 · 必一1.3 · D7',hp:1,atk:'★★★',tier:'e',weak:'配平五步法+电子守恒+强制弱',drop:'【守恒三板斧】'},
+   {n:'位构性三头蛇',src:'④ 位构性簇 · 必一4章 · D8',hp:3,atk:'★★★',tier:'b',weak:'位-构-性三角互推（半径三规则）',drop:'【周期律盾牌】'},
+   {n:'结构三幻影',src:'选必二1–3章 · D9',hp:9,atk:'★★',tier:'e',weak:'电离能/电负性趋势·VSEPR·晶胞均摊法',drop:'【晶体透视镜】'},
+   {n:'钠氯双子',src:'⑤ 元素化合物簇 · 1.1物质分类+必一2章 · D10',hp:2,atk:'★★★',tier:'e',weak:'钠四连变/氯漂白原理',drop:'【海水徽章】'},
+   {n:'铁三角卫士',src:'必一3章 · D11',hp:2,atk:'★★★',tier:'e',weak:'Fe²⁺/Fe³⁺ 互变检验与转化',drop:'【铁三角项链】'},
+   {n:'硫氮双翼魔',src:'必修二5章 · D11',hp:3,atk:'★★★',tier:'b',weak:'硫四连变/氮三角/硫酸工业',drop:'【化工之钥】'},
+   {n:'资源守望者',src:'必修二8章 · D11末',hp:3,atk:'★★',tier:'m',weak:'资源开发/绿色化学',drop:'绿叶纹章'},
+   {n:'热量帐房',src:'⑥ 反应热 · 必修二6章+选必一1章 · D12',hp:4,atk:'★★',tier:'m',weak:'热化学方程式规范/盖斯定律接龙',drop:'【盖斯算盘】'},
+   {n:'平衡巨龙',src:'选必一2章 · D13',hp:4,atk:'★★★★',tier:'b',weak:'三段式算K/勒夏特列/等效平衡/图像先拐先平',drop:'【平衡龙心】'},
+   {n:'四平衡九头蛇',src:'⑦ 水溶液 · 选必一3章 · D14–15',hp:4,atk:'★★★★',tier:'b',weak:'一族常数一个思想+三大守衡+Ksp',drop:'【九头蛇毒腺】（砍一头长一头？不，砍一头灭一头）'},
+   {n:'电化学雷神',src:'⑧ 电化学 · 选必一4章 · D16',hp:3,atk:'★★★',tier:'b',weak:'电极反应式三步/新型电池迁移',drop:'【雷电之锤】'},
+   {n:'有机看门人',src:'⑨ 有机 · 必修二7章 · D17',hp:4,atk:'★★★',tier:'e',weak:'碳四键/同系物同分异构辨析',drop:'碳链手甲'},
+   {n:'结构侦探·烃之三族长',src:'选必三1–2章 · D18',hp:5,atk:'★★★★',tier:'e',weak:'取代/加成/聚合反应矩阵+同分异构三维排查',drop:'【烃族徽记】'},
+   {n:'官能团百变魔王',src:'选必三3章 · D19',hp:5,atk:'★★★★',tier:'b',weak:'十大官能团性质字典（酯化/银镜/水解双向）',drop:'【官能团魔典】'},
+   {n:'生命织匠·聚合物巨像',src:'选必三4–5章 · D20',hp:5,atk:'★★★★',tier:'b',weak:'加聚/缩聚双向书写（单体⇄聚合物）',drop:'【巨像核心】'},
+  ]},
+ {n:'第三幕 · 融合圣殿',zn:'融会贯通',d:'D21–32',c:'#b29aff',lv:'通关→LV3 织网法师',
+  goal:'单挑到此为止——圣殿里全是<b>融合兽</b>（一张皮五簇血），装备必须成套带齐；结束时<b>合书重绘全图</b>（画不出=怪物复活）。',
+  gate:'守关闸③：三大融合兽限时卷 ≥75% ｜ 合书导图覆盖 11单元+10簇 ≥80% ｜ 错题二错率 <20%',
+  mons:[
+   {n:'工厂泰坦',src:'专题一 · 工业流程 · D21–24',hp:4,atk:'★★★★',tier:'b',weak:'流程五步（预处理→浸取→净化→分离→产品）+调pH/Ksp+产率绿色化学',drop:'【泰坦扳指】'},
+   {n:'真相审判者',src:'专题二 · 实验探究 · D25–28',hp:4,atk:'★★★★',tier:'b',weak:'气体全链设计/变量三问/滴定三位一体/方案四段式',drop:'【审判天平】'},
+   {n:'线索迷宫兽',src:'专题三 · 有机推断 · D29–31',hp:3,atk:'★★★★',tier:'b',weak:'信息词表+同分异构枚举+合成双向夹击',drop:'【迷宫丝线】'},
+   {n:'全图复绘幻影',src:'D32 · 合书重绘整树',hp:21,atk:'★★★',tier:'b',weak:'闭卷画完全部11单元+10簇导图',drop:'【织网法师执照】'},
+  ]},
+ {n:'第四幕 · 熔炉战场',zn:'炉火纯青',d:'D33–41',c:'#ffb020',lv:'通关→LV4 淬火战神',
+  goal:'竞技场五连战：<b>镜像巨像</b>＝你自己的薄弱点具象化（全真模拟）。隔日一战＋归因日锻造——输赢都要拆解巨像成分。',
+  gate:'守关闸④：5 战完成·分数曲线浮动 <10%（企稳）｜ 错因从知识型主导→方法/时间型 ｜ 应试策略卡定稿',
+  mons:[
+   {n:'镜像巨像 Ⅰ–Ⅴ',src:'全真模拟 · D33/35/37/39/41',hp:5,atk:'★★★★',tier:'b',weak:'全装备+策略卡：时间分配/先易后难/5分钟放弃线/检查流程',drop:'【战神胸甲】（每战胜+10XP）'},
+   {n:'归因锻造师',src:'深度归因 · D34/36/38/40',hp:4,atk:'★★★',tier:'e',weak:'错因四分法：知识型回树/审题型圈画/方法型重练/时间型调节奏',drop:'【淬火锤】'},
+   {n:'必考点清剿小队',src:'最后20必考点 · 随归因日',hp:20,atk:'★★★',tier:'e',weak:'按10年真题频次逐个点名击杀',drop:'点名录'},
+  ]},
+ {n:'第五幕 · 巅峰之塔',zn:'妙笔生花',d:'D42–44',c:'#ff7ad9',lv:'通关→LV5 点金诗人',
+  goal:'不遇新怪——只<b>保温装备</b>：一页纸法典＋两场轻竞技＋作息结界对齐考试时段。',
+  gate:'守关闸⑤：一页纸法典过完 ｜ 2 场手感轻竞技 ｜ 睡眠结界 ≥7.5h×3 晚 ｜ 文具/证件/路线预演',
+  mons:[
+   {n:'一页纸法典守卫',src:'全科浓缩 · D42–44',hp:1,atk:'★★★',tier:'e',weak:'自己抄写浓缩（生成效应最大化）',drop:'【法典·一页纸】'},
+   {n:'手感双影',src:'轻竞技 · D42/D43',hp:2,atk:'★★',tier:'m',weak:'不追分，保持战斗肌肉记忆',drop:'锋利度保持'},
+   {n:'默写三姐妹',src:'末轮 · D44',hp:3,atk:'★★',tier:'m',weak:'周期表主族/溶解性表/活动性顺序默写化',drop:'记忆结晶'},
+  ]},
+ {n:'终幕 · 终焉之巅',zn:'执笔点睛',d:'D45',c:'#ff5f5f',lv:'通关→MAX 执笔剑圣',
+  goal:'最终战不打新怪：翻看<b>全绿版图与进步曲线</b>10 分钟（全绿版图+进步曲线），深呼吸锚点，进场。<b>45 天修炼本身已是神器。</b>',
+  gate:'终焉结算：考后收获仪式——封存错题残片册/法典/曲线图，写下"45天前 vs 现在"——为下个修炼场储自信',
+  mons:[
+   {n:'终焉之笔',src:'D45 · 上场',hp:1,atk:'?????',tier:'b',weak:'全部装备+五级称号+峰终状态',drop:'【执笔剑圣·称号】'},
+  ]},
+];
+(function(){
+  const host=document.getElementById('zones');
+  ZONES.forEach((z,zi)=>{
+    const div=document.createElement('div'); div.className='zone';
+    const mons=z.mons.map((m,mi)=>{
+      const hpW=Math.min(100,Math.round(m.hp/9*100+12));
+      const tierCls=m.tier==='b'?'boss':(m.tier==='e'?'elite':'');
+      const tierTag=m.tier==='b'?'<span class="tag b">BOSS</span>':(m.tier==='e'?'<span class="tag e">精英</span>':'<span class="tag m">小怪</span>');
+      return `<div class="mcard ${tierCls}" data-tier="${m.tier}" data-zone="${zi}" data-mi="${mi}">
+        <span class="stamp">✓</span>
+        <div class="mn">${m.n} ${tierTag}</div>
+        <div class="msrc">${m.src}</div>
+        <div class="hpbar"><span class="hk">HP</span><div class="hb"><div class="hf" style="width:${hpW}%"></div></div><span class="hv">${m.hp}</span><span class="atk">ATK ${m.atk}${m.atkNote?'·'+m.atkNote:''}</span></div>
+        <div class="weak">弱点：<b>${m.weak}</b></div>
+        <div class="drop">掉落：<b>${m.drop}</b></div>
+      </div>`;
+    }).join('');
+    div.innerHTML=`<div class="zhead" style="background:${z.c}1a;border-bottom:2px solid ${z.c}">
+        <span class="zn" style="background:${z.c}">${z.n}</span><span class="clearbadge">区域已清 ✓</span>
+        <span class="zt">${z.zn}</span><span class="zd">${z.d}</span>
+        <span class="zl">${z.lv}</span></div>
+      <div class="zbody"><div class="zgoal">${z.goal}</div>
+      <div class="mgrid">${mons}</div>
+      <div class="zgate"><b>守关闸门：</b>${z.gate}</div></div>`;
+    host.appendChild(div);
+  });
+})();
+
+/* ═══ 装备库 ═══ */
+const GEAR=[
+ {n:'四桥罗盘',f:'四桥测量师掉落',e:'mol 换算链秒出：n=m/M=V/Vm=N/N_A=cV'},
+ {n:'守恒三板斧',f:'电子窃贼掉落',e:'质量/电子/电荷三守恒，一切计算怪的先手'},
+ {n:'周期律盾牌',f:'位构性三头蛇掉落',e:'位-构-性三角互推，半径比较三规则'},
+ {n:'晶体透视镜',f:'结构三幻影掉落',e:'电离能/电负性/VSEPR/晶胞均摊（顶1/8棱1/4面1/2心1）'},
+ {n:'平衡龙心',f:'平衡巨龙掉落',e:'三段式算K+勒夏特列+等效平衡+"先拐先平"图像诀'},
+ {n:'九头蛇毒腺',f:'四平衡九头蛇掉落',e:'一族常数一个思想+三大守恒+Ksp转化'},
+ {n:'雷电之锤',f:'电化学雷神掉落',e:'电极反应式三步：定正负→写主干→配电荷'},
+ {n:'官能团魔典',f:'官能团百变魔王掉落',e:'十大官能团性质字典：推断题的罗塞塔石碑'},
+ {n:'泰坦扳指',f:'工厂泰坦掉落',e:'工业流程五步拆解+调pH/Ksp速算'},
+ {n:'审判天平',f:'真相审判者掉落',e:'实验四段式：目的→操作→现象→结论；变量三问'},
+ {n:'迷宫丝线',f:'线索迷宫兽掉落',e:'有机信息词表+合成双向夹击（顺推+逆推）'},
+ {n:'法典·一页纸',f:'一页纸法典守卫掉落',e:'高频考点+易错警示+方程式30条+模板句，自抄自炼'},
+];
+document.getElementById('gear').innerHTML=GEAR.map(g=>
+ `<div class="gcard"><div class="gn">${g.n}</div><div class="gf">${g.f}</div><div class="ge">${g.e}</div></div>`).join('');
+
+/* ═══ 打怪交互引擎：点击循环 满血→残血→击杀；区域清版解锁称号；localStorage 存档 ═══ */
+(function(){
+  const KEY='chem45rpg-v1';
+  const TOTAL=39, ZONES_N=6;
+  const RANK_STEP=[0,1,2,3,4,5,6]; // 每清一幕升一级（六幕=LV0→MAX）
+  const RANK_NAMES=['LV0 见习炼金士','LV1 地图持有者','LV2 解牛剑客','LV3 织网法师','LV4 淬火战神','LV5 点金诗人','MAX 执笔剑圣'];
+  let state=load()||{};
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+  function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+  window.resetSave=function(){state={};save();location.reload()};
+  window.markAllCleared=function(){
+    document.querySelectorAll('.mcard').forEach((c,i)=>{state[c.getAttribute('data-zone')+'-'+c.getAttribute('data-mi')]='dead'});
+    save();refresh();
+  };
+  // 闸门节点一次性快照：fill=#7ad98f 且带 rotate 变换的方块（区域底矩形有 opacity，不会误入）
+  const GATES=[...document.querySelectorAll('#map rect')].filter(r=>r.getAttribute('fill')==='#7ad98f' && r.hasAttribute('transform'));
+  const cards=()=>[...document.querySelectorAll('.mcard')];
+  function applyCard(c){
+    const id=c.getAttribute('data-zone')+'-'+c.getAttribute('data-mi');
+    const st=state[id]||'alive';
+    c.classList.toggle('wounded',st==='wounded');
+    c.classList.toggle('dead',st==='dead');
+  }
+  function zoneClear(zi){
+    return [...document.querySelectorAll(`.mcard[data-zone="${zi}"]`)].every(c=>{
+      const id=c.getAttribute('data-zone')+'-'+c.getAttribute('data-mi');
+      return state[id]==='dead';
+    });
+  }
+  function refresh(){
+    let killed=0;
+    cards().forEach(c=>{applyCard(c); if(c.classList.contains('dead'))killed++;});
+    // 区域徽章 + 称号
+    let clearedZones=0;
+    for(let i=0;i<ZONES_N;i++){
+      const zEl=document.querySelectorAll('.zone')[i];
+      const ok=zoneClear(i);
+      if(zEl)zEl.classList.toggle('cleared',ok);
+      if(ok)clearedZones++;
+    }
+    document.getElementById('killbar').style.width=(killed/TOTAL*100)+'%';
+    document.getElementById('killnum').textContent=`已击杀 ${killed} / ${39}（红=满血待战 · 黄=残血再战 · 绿=已击杀）`;
+    const rk=RANK_STEP[Math.min(clearedZones,6)];
+    document.getElementById('rankbar').style.width=(clearedZones/6*100)+'%';
+    document.getElementById('rankname').textContent=RANK_NAMES[rk]+(clearedZones>=6?'（满级·终焉已至）':'（每清一片地图升一级）');
+    document.getElementById('avrank').innerHTML=clearedZones>=6?'执笔剑圣<br>⚡MAX':RANK_NAMES[rk].split(' ')[1]+'<br>→ 执笔剑圣';
+    // 地图节点点亮：闸门节点变绿（快照捕获，避免属性选择器自噬）
+    GATES.forEach((g,idx)=>{g.setAttribute('fill', idx<clearedZones?'#7ad98f':'#3a5a48');});
+  }
+  // 点击循环 alive→wounded→dead→alive
+  document.addEventListener('click',e=>{
+    const c=e.target.closest('.mcard'); if(!c)return;
+    const id=c.getAttribute('data-zone')+'-'+c.getAttribute('data-mi');
+    const cur=state[id]||'alive';
+    state[id]=cur==='alive'?'wounded':(cur==='wounded'?'dead':'alive');
+    save();refresh();
+  });
+  refresh();
+})();
+</script>
+</body>
+</html>
