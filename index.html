@@ -50,6 +50,8 @@
       <button class="btn" id="resetBtn">重置视角</button>
       <button class="btn" id="glbBtn">导出 GLB 模型</button>
       <a class="btn gold" href="./arena.html" target="_blank" rel="noopener" title="45 天化学修炼场 · 打怪升级版">⚔️ 45 天修炼场</a>
+      <button class="btn gold" id="treeBtn" title="45 天化学冲刺结构树（周期表作背景板）">📜 冲刺结构树</button>
+      <button class="btn gold" id="chartsBtn" title="45 天冲刺 · 图表与流程地图（周期表作背景板）">📊 图表沙盘</button>
     </div>
   </div>
 
@@ -66,6 +68,12 @@
   </footer>
 
   <div id="toast" class="hidden"></div>
+
+  <!-- 结构内容叠加层：周期表做背景板 -->
+  <div id="sheet">
+    <button id="sheetClose" title="收起（Esc）">×</button>
+    <div class="wrap"><iframe id="sheetFrame" src="about:blank" title="45 天冲刺结构内容"></iframe></div>
+  </div>
 
   <script type="module" src="app.js"></script>
 </body>

@@ -414,6 +414,27 @@ function toast(msg) {
   toastTimer = setTimeout(() => el.classList.add('hidden'), 3200);
 }
 
+/* ---------------- 结构内容叠加层：周期表做背景板 ---------------- */
+const sheet = document.getElementById('sheet');
+const sheetFrame = document.getElementById('sheetFrame');
+let rotBefore = false;
+function openSheet(src) {
+  sheetFrame.src = src;
+  sheet.classList.add('open');
+  rotBefore = controls.autoRotate;
+  controls.autoRotate = true; // 背景板缓转
+}
+function closeSheet() {
+  if (!sheet.classList.contains('open')) return;
+  sheet.classList.remove('open');
+  sheetFrame.src = 'about:blank';
+  controls.autoRotate = rotBefore;
+}
+document.getElementById('treeBtn').onclick = () => openSheet('./tree.html');
+document.getElementById('chartsBtn').onclick = () => openSheet('./charts.html');
+document.getElementById('sheetClose').onclick = closeSheet;
+addEventListener('keydown', ev => { if (ev.key === 'Escape') closeSheet(); });
+
 /* ---------------- 主循环 ---------------- */
 addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;

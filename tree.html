@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>45天化学冲刺 · 结构树（如数家珍 → 庖丁解牛 → 融会贯通 → 炉火纯青 → 妙笔生花）</title>
+<style>
+  :root{--bg:#131313;--panel:#1c1c1c;--line:#2c4a6e;--txt:#e6e6e6;--dim:#8f8f8f;
+        --c:#b29aff;--warm:#ffb020;--ok:#7ad98f;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei",sans-serif;width:1200px;padding:28px 34px 60px;margin:0 auto}
+  h1{font-size:26px}
+  h1 .v{color:var(--warm);font-size:14px;vertical-align:middle;margin-left:10px}
+  .bar{display:flex;align-items:center;gap:10px;margin:12px 0 18px;flex-wrap:wrap}
+  .bar .meta{color:var(--dim);font-size:12px;flex:1;min-width:400px;line-height:1.6}
+  button{background:#222;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 14px;font-size:12.5px;cursor:pointer}
+  button:hover{border-color:var(--warm);color:var(--warm)}
+  /* ── 树 ── */
+  .tree ul{margin:0;padding-left:26px;list-style:none}
+  .tree>ul{padding-left:0}
+  .tree li{position:relative;padding:3px 0 3px 16px}
+  .tree li::before{content:'';position:absolute;left:0;top:-6px;bottom:0;border-left:2px solid var(--line)}
+  .tree li:last-child::before{height:22px}
+  .tree li::after{content:'';position:absolute;left:0;top:19px;width:12px;height:0;border-top:2px solid var(--line)}
+  .tree>ul>li::before,.tree>ul>li::after{display:none}
+  summary{cursor:pointer;list-style:none;display:inline}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:'▸';color:var(--dim);margin-right:6px;display:inline-block;transition:transform .15s}
+  details[open]>summary::before{transform:rotate(90deg)}
+  /* 节点样式 */
+  .root{font-size:19px;font-weight:800;color:#fff}
+  .root .cnt{font-size:12px;color:var(--dim);font-weight:400;margin-left:8px}
+  .stg{font-size:16px;font-weight:800;padding:4px 16px;border-radius:9px;display:inline-block;margin-top:14px;color:#141414}
+  .s1{background:var(--p,#6fb6ff)} .s2{background:var(--ok)} .s3{background:var(--c)}
+  .s4{background:var(--warm)} .s5{background:var(--m,#ff7ad9)} .s6{background:#ff5f5f}
+  summary .d{font-size:12.5px;background:rgba(0,0,0,.25);border-radius:6px;padding:2px 8px;margin-left:8px;font-weight:800;color:#fff}
+  summary small{font-weight:500;font-size:11.5px;opacity:.85;margin-left:8px;color:#c9c9c9}
+  .stgline{font-size:12px;color:var(--dim);margin:6px 0 2px;line-height:1.7}
+  .stgline b{color:#d9d9d9;font-weight:600}
+  .subj{font-size:14.5px;font-weight:800;padding:2px 12px;border-radius:7px;display:inline-block;margin-top:8px;color:#141414;background:var(--c)}
+  .subj small{font-weight:500;font-size:11px;opacity:.85;margin-left:8px}
+  .subj.gk{background:#9aa7b8}
+  .cluster{font-size:13.5px;font-weight:700}
+  .cluster .q{color:var(--dim);font-weight:400;font-size:11.5px;margin-left:8px}
+  .cluster .dd{color:var(--warm);font-size:11px;margin-left:8px;font-weight:700}
+  .cluster .chip{display:inline-block;border:1.5px solid var(--line);border-radius:20px;padding:2px 12px;background:var(--panel)}
+  .star{color:var(--warm);font-size:11px;margin-left:6px}
+  .chap{font-size:12.5px;color:#dcdcdc}
+  .chap .star{color:var(--warm);font-size:11px;margin-left:6px}
+  .chap .n{color:var(--dim);font-size:11px;margin-left:6px}
+  .chap .dd{color:var(--warm);font-size:11px;margin-left:8px;font-weight:700}
+  .leaf{font-size:12px;color:#bdbdbd;list-style:none;line-height:1.8}
+  .leaf i{font-style:normal;color:#5f6f80;margin-right:4px}
+  .leaf b{color:#e6e6e6;font-weight:600}
+  .task{font-size:11.5px;color:#9fb8a8;margin-top:1px;line-height:1.7;padding-left:2px}
+  .task::before{content:'✎ ';color:#5f8f6f}
+  .fuse b{color:#ffd57a}
+  .arr{color:#6a7fa0}
+  .pretag{background:#233559;border-radius:5px;padding:1px 7px;font-size:11px;color:#9fc0ff;font-weight:700}
+  .presum{color:var(--dim);font-size:11px;margin-left:6px}
+  ul.pre li.leaf{color:#a8a8c8}
+  .psy{display:inline-block;background:#1a1533;border:1px solid #4b3f80;color:#c3b3ff;border-radius:8px;padding:2px 10px;font-size:11px;margin:1px 3px 1px 0}
+  .gates{display:inline-block;background:#102416;border:1px solid #1f5c38;color:var(--ok);border-radius:8px;padding:4px 12px;font-size:11.5px;margin-top:8px;line-height:1.7}
+  .matrix{margin:6px 0 8px;overflow-x:auto}
+  table.mtx{border-collapse:collapse;font-size:11px;width:100%}
+  table.mtx th,table.mtx td{border:1px solid #26364a;padding:5px 7px;text-align:left;vertical-align:top;line-height:1.55}
+  table.mtx th{background:#1a2432;color:#cfe0f5;font-weight:700;font-size:11.5px;white-space:nowrap}
+  table.mtx td.stgname{font-weight:800;color:#fff;white-space:nowrap;background:#1c1c1c}
+  table.mtx td .dd{display:block;color:var(--warm);font-weight:700;font-size:10.5px;margin-bottom:2px}
+  .panel{background:var(--panel);border:1px solid #26364a;border-radius:10px;padding:14px 18px;margin:16px 0;font-size:12.5px;line-height:1.9}
+  .panel h3{font-size:13.5px;color:var(--warm);margin-bottom:6px}
+  .panel .ai-rule{color:#ff9db8}
+  .foot{margin-top:34px;border-top:1px solid #262626;padding-top:12px;color:var(--dim);font-size:11.5px;line-height:1.9}
+</style>
+</head>
+<body>
+<a href="./index.html" title="回到 3D 元素周期表" style="position:fixed;top:14px;right:16px;z-index:9;background:#221c36;border:1px solid #4a3f6a;color:#cfc6e8;border-radius:8px;padding:6px 13px;font-size:11.5px;text-decoration:none"
+   onmouseover="this.style.borderColor='#f0c060';this.style.color='#f0c060'" onmouseout="this.style.borderColor='#4a3f6a';this.style.color='#cfc6e8'">⤺ 3D 元素周期表</a>
+<h1>45天 · 化学冲刺结构树<span class="v">初高中全套 · 一棵树 · 五阶段调度 · 2026 口径</span></h1>
+<div class="bar">
+  <button onclick="setAll(true)">展开全部</button>
+  <button onclick="lv('dstg',true);lv('dclu',true);lv('dchap',false)">展开到簇</button>
+  <button onclick="lv('dstg',true);lv('dclu',false)">收起到阶段</button>
+  <button onclick="setAll(false)">全部收起</button>
+  <div class="meta">
+    干＝阶段（五段＋点睛日），枝＝融合簇（与知识树.html 同簇同尺），叶＝章·节·课题（<b>初中 11 单元 35 课题 + 高中 10 簇 19 章 55 节全部排入</b>，带高考权重★与日程 D）｜ 教育逻辑参照 AP：考点权重对齐 → 单元精讲＋形成性闸门 → 跨单元综合 → 全真模拟 → 考前调度 ｜ 每日 4h 主学习 + 1h 记忆窗口 ｜ 点击 ▸ 折叠/展开
+  </div>
+</div>
+
+<div class="panel">
+  <h3>阶段总览 · 主干一览表（先看这张再看树）</h3>
+  <div class="matrix"><table class="mtx">
+    <tr><th style="width:100px">阶段 / 融合簇</th><th>全科动作</th><th>①走进化学与实验<br>（初1单元+⑩）</th><th>②物质构成与结构<br>（初2单元+④）</th><th>③身边的化学物质<br>（初4单元+⑤）</th><th>④反应·定量·溶液·能量<br>（初3单元+①②⑥⑦⑧）</th><th>⑤有机与材料<br>（初1单元+⑨）</th></tr>
+    <tr><td class="stgname">一如数家珍<span class="dd">D1–5 · 测绘</span></td>
+      <td>诊断卷＋全树三色＋AI报告</td><td>初中一单元三色＋探究方法摸底</td><td>初中三·四单元三色</td><td>初中二·六·八·十单元三色</td><td>初中五·七·九单元三色</td><td>初中十一单元三色</td></tr>
+    <tr><td class="stgname">二庖丁解牛<span class="dd">D6–20 · 精讲</span></td>
+      <td>前置篇随簇补＋每章三步闭环</td><td>⑩方法主线贯穿每日例题</td><td>④位构性：必一4章＋选必二1–3章 ★★★</td><td>⑤元素化合物：钠氯铁硫氮＋化工 ★★★</td><td>①物质的量→②氧化还原→⑥平衡→⑦水溶液→⑧电化学（★★★★主链）</td><td>⑨有机：必修二7→选必三1–5章 ★★★★</td></tr>
+    <tr><td class="stgname">三融会贯通<span class="dd">D21–32 · 综合</span></td>
+      <td>跨簇大题＋导图重绘</td><td>实验探究大题（⑩×全簇）</td><td>结构—性质—用途推断链</td><td>工业流程大题（⑤×④×⑥⑦⑧）</td><td>原理综合：图像题/守恒题/电化学综合</td><td>有机推断与合成专题</td></tr>
+    <tr><td class="stgname">四炉火纯青<span class="dd">D33–41 · 实战</span></td>
+      <td>5套全真＋4归因日＋错因四分法</td><td>实验题规范表达</td><td>周期律图像题速判</td><td>流程题套路固化</td><td>原理题图像口诀化</td><td>有机题信息迁移固化</td></tr>
+    <tr><td class="stgname">五妙笔生花<span class="dd">D42–44 · 巅峰</span></td>
+      <td>一页纸＋2套手感卷＋作息对齐</td><td>易错操作清单末扫</td><td>周期表默写化</td><td>颜色/溶解性速查表</td><td>守恒法口诀末轮</td><td>官能团矩阵末轮</td></tr>
+    <tr><td class="stgname">点睛<span class="dd">D45 · 上场</span></td>
+      <td>仪式·预演·进场（不做新题）</td><td colspan="5" style="color:var(--dim)">轻仪式：翻看全绿版图证据链 10 分钟 → 心理预演 → 进场 → 考后收获仪式</td></tr>
+  </table></div>
+  <span class="psy">心理学锚点逐阶段标注在树内（紫色）——依据见《心理学调研-结构设计依据》</span>
+  <span class="psy" style="border-color:#4a1f2e;background:#331520;color:#ff9db8">AI 用法三条纪律（防拐杖效应，见《AI论文调研》）</span>
+</div>
+
+<div class="tree">
+<ul>
+<li><span class="root">45天化学冲刺 · 一棵树<span class="cnt">5 阶段 + 1 点睛日 ｜ 初中 11 单元 35 课题 ｜ 高中 10 簇 19 章 55 节 ｜ 每日 4h + 记忆窗口 1h</span></span>
+<ul>
+
+<!-- ═══════ 阶段一 如数家珍 D1-5 ═══════ -->
+<li><details class="dstg" open><summary><span class="stg s1">阶段一 · 如数家珍</span><span class="d">D1–5</span><small>观全局 —— 整棵树尽在胸中，任提一个考点都知道它长在树上哪里</small></summary>
+  <ul>
+  <li class="stgline"><b>阶段目标：</b>诊断基线落档；全树三色标注完成（红=漏洞/黄=模糊/绿=已握）；AI 漏洞-簇映射报告生成。<b>AP 对标：</b>Pre-assessment 诊断 ＋ CED 考点权重对齐（先看考试考什么、各占多少分，再决定力气往哪使）。</li>
+  <li class="stgline"><span class="psy">新起点效应（D1=时间地标，启动仪式）</span><span class="psy">目标设定理论（具体+挑战目标 &gt;“尽力而为”）</span><span class="psy">掌控感启动（版图在手，未知变已知）</span></li>
+  <li><details class="dclu" open><summary><span class="cluster"><span class="chip">全科动作</span><span class="dd">D1–5</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D1</i><b>冲刺启动仪式</b>：写下 45 天目标（具体到分数/掌握度）＋ 把知识树打印上架为唯一地图</li>
+    <li class="leaf"><i>D1–2</i><b>首套全真诊断卷</b>（目标学段真题：中考卷或高考卷，按考试时长）——基线分落档（进步曲线起点）</li>
+    <li class="leaf"><i>D3</i><b>化学用语摸底</b>：方程式书写 30 题（配平/条件/状态符号/离子方程式改写）——用语不过关则全程扣分</li>
+    <li class="leaf"><i>D5</i><b>AI 漏洞-簇映射报告</b>：错题按五簇十簇归类，生成个人优先级表（红簇优先、★★★★优先）</li>
+    </ul>
+  </details></li>
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">① 走进化学与实验</span><span class="q">变化·性质·科学探究</span><span class="dd">D2</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D2</i>前置篇·初中<b>一单元</b>三色：物质的变化和性质｜化学实验与科学探究</li>
+    <li class="leaf"><i>D2</i>高中·⑩实验探究簇方法主线预热：分离提纯→气体制备→检验→定量→方案评价（五环节先记住地图，内容在阶段二逐簇长出）</li>
+    </ul>
+  </details></li>
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">② 物质构成与结构</span><span class="q">分子原子→元素→结构决定性质</span><span class="dd">D2</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D2</i>前置篇·初中<b>三单元</b>三色：分子和原子｜原子结构｜元素</li>
+    <li class="leaf"><i>D2</i>前置篇·初中<b>四单元</b>三色：水资源及其利用｜水的组成｜物质组成的表示（化学式·化合价）</li>
+    </ul>
+  </details></li>
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">③ 身边的化学物质</span><span class="q">空气氧气·碳·金属·酸碱盐</span><span class="dd">D3–4</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D3</i>前置篇·初中<b>二单元</b>三色：我们周围的空气｜氧气｜制取氧气</li>
+    <li class="leaf"><i>D3</i>前置篇·初中<b>六单元</b>三色：碳单质的多样性｜碳的氧化物｜二氧化碳的实验室制取</li>
+    <li class="leaf"><i>D4</i>前置篇·初中<b>八单元</b>三色：金属材料｜金属的化学性质（活动性顺序）｜金属资源利用与保护</li>
+    <li class="leaf"><i>D4</i>前置篇·初中<b>十单元</b>三色：酸和碱｜酸碱中和反应｜盐 化肥（复分解反应）——<b>初中主战场，红叶最多处，重点标注</b></li>
+    </ul>
+  </details></li>
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">④ 反应·定量·溶液·能量</span><span class="q">全卷最难链条</span><span class="dd">D4</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D4</i>前置篇·初中<b>五单元</b>三色：质量守恒定律｜化学方程式</li>
+    <li class="leaf"><i>D4</i>前置篇·初中<b>七单元</b>三色：燃料的燃烧｜化石能源的合理利用</li>
+    <li class="leaf"><i>D4</i>前置篇·初中<b>九单元</b>三色：溶液的形成｜溶解度｜溶质的质量分数</li>
+    </ul>
+  </details></li>
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">⑤ 有机与材料</span><span class="q">从营养物到官能团推断</span><span class="dd">D5</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D5</i>前置篇·初中<b>十一单元</b>三色：化学与人体健康（营养素·元素）｜有机合成材料</li>
+    </ul>
+  </details></li>
+  <li class="gates">出口闸门①：全树三色完成（初中 35 课题＋高中 19 章逐叶标注）｜ 基线分落档 ｜ 用语摸底错因归类 ｜ 优先级表生成 —— 达标才进阶段二</li>
+  </ul>
+</details></li>
+
+<!-- ═══════ 阶段二 庖丁解牛 D6-20 ═══════ -->
+<li><details class="dstg" open><summary><span class="stg s2">阶段二 · 庖丁解牛</span><span class="d">D6–20</span><small>拆核心 —— 高权重簇逐个击破，技经肯綮、游刃有余（每簇：前置篇初中补漏 → 高中章精讲 → 例题 → 闭卷自测）</small></summary>
+  <ul>
+  <li class="stgline"><b>阶段目标：</b>高中 10 簇全部过一遍三步闭环，★★★ 及以上章自测 ≥80%；初中红叶随簇清剿。<b>AP 对标：</b>Unit-by-unit 精讲 ＋ Progress Check 形成性闸门（学完一章立刻小测，不过关不前进）。</li>
+  <li class="stgline"><span class="psy">心流通道（85%规则：每练习组正确率瞄准 85%，过高升难度、过低降难度）</span><span class="psy">最近发展区＋脚手架（AI 提示阶梯，不直接给答案）</span><span class="psy">胜任感积累（每章过关即点亮）</span></li>
+
+  <li><details class="dclu" open><summary><span class="cluster"><span class="chip">④ 反应·定量·溶液·能量 ｜ 高中·① 物质的量簇 + ② 氧化还原簇</span><span class="q">先修工具，再攻主链——两大工具不通，后面全堵</span><span class="dd">D6–7</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D6</i>前置篇·初中五/九单元红叶清剿：守恒定律计算题｜溶解度曲线题（补初中计算手感）</li>
+    <li><details class="dchap"><summary><span class="chap">高中·① 物质的量簇（必一 2.3）<span class="star">★★★</span><span class="dd">D6</span></span></summary>
+      <ul>
+      <li class="leaf"><i>2.3</i>物质的量（NA / M / Vm / c 四座桥的源头）</li>
+      <li class="task">四座桥换算链练到不假思索；溶液配制实验（容量瓶五步）随章带过——⑩实验主线第 1 叶</li>
+      </ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">高中·② 氧化还原簇（必一 1.3）<span class="star">★★★</span><span class="dd">D7</span></span></summary>
+      <ul>
+      <li class="leaf"><i>1.3</i>氧化还原反应（升失氧降得还→配平双守恒→强制弱）</li>
+      <li class="task">配平五步法 30 题；电子守恒计算（混合物/多步反应）；“强制弱”自发的判据——这两簇是全卷计算题的螺丝刀</li>
+      </ul>
+    </details></li>
+    </ul>
+  </details></li>
+
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">② 物质构成与结构 ｜ 高中·④ 位构性簇</span><span class="q">元素认读地图：位置→结构→性质</span><span class="dd">D8–9</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D8</i>前置篇·初中三/四单元红叶清剿：微粒观（分子原子离子辨析）｜化合价口诀默写化</li>
+    <li><details class="dchap"><summary><span class="chap">必一·第四章 物质结构 元素周期律<span class="star">★★★</span><span class="n">3节</span><span class="dd">D8</span></span></summary>
+      <ul><li class="leaf"><i>4.1</i>原子结构与元素周期表</li><li class="leaf"><i>4.2</i>元素周期律</li><li class="leaf"><i>4.3</i>化学键</li>
+      <li class="task">“位—构—性”三角互推（给位置推性质、给性质推位置各 15 题）；微粒半径比较三规则；离子键/共价键辨析</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必二·第一章 原子结构与性质<span class="star">★★</span><span class="n">2节</span><span class="dd">D9</span></span></summary>
+      <ul><li class="leaf"><i>1.1</i>原子结构</li><li class="leaf"><i>1.2</i>原子结构与元素的性质</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必二·第二章 分子结构与性质<span class="star">★★</span><span class="n">3节</span><span class="dd">D9</span></span></summary>
+      <ul><li class="leaf"><i>2.1</i>共价键</li><li class="leaf"><i>2.2</i>分子的空间结构</li><li class="leaf"><i>2.3</i>分子结构与物质的性质</li>
+      <li class="task">选必二按 ★★ 定位：框架+高频点（电负性/电离能趋势、VSEPR 模型、分子极性与氢键），不恋战</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必二·第三章 晶体结构与性质<span class="star">★★</span><span class="n">4节</span><span class="dd">D9</span></span></summary>
+      <ul><li class="leaf"><i>3.1</i>物质的聚集状态与晶体的常识</li><li class="leaf"><i>3.2</i>分子晶体与共价晶体</li><li class="leaf"><i>3.3</i>金属晶体与离子晶体</li><li class="leaf"><i>3.4</i>配合物与超分子</li>
+      <li class="task">四大晶体“熔点/导电/硬度”一张对比表；晶胞均摊法计算（顶点 1/8·棱 1/4·面 1/2·体心 1）</li></ul>
+    </details></li>
+    </ul>
+  </details></li>
+
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">③ 身边的化学物质 ｜ 高中·⑤ 元素化合物簇</span><span class="q">物质版图：钠氯铁硫氮</span><span class="dd">D10–11</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D10</i>前置篇·初中二/六/八/十单元红叶清剿：氧气制取两法｜CO/CO₂ 转化三角｜金属活动性顺序应用｜酸碱盐复分解条件</li>
+    <li class="leaf"><i>1.1</i>物质的分类及转化（必一 1.1·认知框架：同素异形体·胶体·氧化物分类）<span class="dd">D10</span></li>
+    <li><details class="dchap"><summary><span class="chap">必一·第二章 海水中的重要元素——钠和氯（除 2.3 归①）<span class="star">★★★</span><span class="n">2叶</span><span class="dd">D10</span></span></summary>
+      <ul><li class="leaf"><i>2.1</i>钠及其化合物</li><li class="leaf"><i>2.2</i>氯及其化合物</li>
+      <li class="task">钠四连变（Na→Na₂O→Na₂O₂→NaOH→Na₂CO₃/NaHCO₃）；氯漂白原理（次氯酸/次氯酸盐）；侯氏制碱法</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">必一·第三章 铁 金属材料<span class="star">★★★</span><span class="n">2节</span><span class="dd">D11</span></span></summary>
+      <ul><li class="leaf"><i>3.1</i>铁及其化合物</li><li class="leaf"><i>3.2</i>金属材料</li>
+      <li class="task">铁三角（Fe²⁺/Fe³⁺ 互变检验与转化）；铝合金/炼铁——衔接初中八单元金属线</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">必修二·第五章 化工生产中的重要非金属元素<span class="star">★★★</span><span class="n">3节</span><span class="dd">D11</span></span></summary>
+      <ul><li class="leaf"><i>5.1</i>硫及其化合物</li><li class="leaf"><i>5.2</i>氮及其化合物</li><li class="leaf"><i>5.3</i>无机非金属材料</li>
+      <li class="task">硫四连变（S→SO₂→SO₃→H₂SO₄ + 浓硫酸三性）；氮三角（N₂→NH₃→NO→NO₂→HNO₃）；硫酸工业/合成氨——阶段三工业流程题的原料库</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">必修二·第八章 化学与可持续发展<span class="star">★★</span><span class="n">3节</span><span class="dd">D11 末</span></span></summary>
+      <ul><li class="leaf"><i>8.1</i>自然资源的开发利用</li><li class="leaf"><i>8.2</i>化学品的合理使用</li><li class="leaf"><i>8.3</i>环境保护与绿色化学</li></ul>
+    </details></li>
+    </ul>
+  </details></li>
+
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">④ 反应·定量·溶液·能量 ｜ 高中·⑥⑦⑧ 原理三簇（全卷最难链）</span><span class="q">能量·快慢·限度·电路版氧化还原</span><span class="dd">D12–16</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D12</i>前置篇·初中七单元红叶清剿：燃烧三要素｜化石能源利用</li>
+    <li><details class="dchap"><summary><span class="chap">必修二·第六章 化学反应与能量<span class="star">★★</span><span class="n">2节</span><span class="dd">D12</span></span></summary>
+      <ul><li class="leaf"><i>6.1</i>化学反应与能量变化</li><li class="leaf"><i>6.2</i>化学反应的速率与限度</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必一·第一章 化学反应的热效应<span class="star">★★</span><span class="n">2节</span><span class="dd">D12</span></span></summary>
+      <ul><li class="leaf"><i>1.1</i>反应热</li><li class="leaf"><i>1.2</i>反应热的计算（盖斯定律）</li>
+      <li class="task">热化学方程式书写规范（状态/符号/焓变单位）；盖斯定律两步接龙计算</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必一·第二章 化学反应速率与化学平衡<span class="star">★★★★</span><span class="n">4节</span><span class="dd">D13</span></span></summary>
+      <ul><li class="leaf"><i>2.1</i>化学反应速率</li><li class="leaf"><i>2.2</i>化学平衡</li><li class="leaf"><i>2.3</i>化学反应的方向</li><li class="leaf"><i>2.4</i>化学反应的调控</li>
+      <li class="task">速率计算四法（三段式）；勒夏特列移动判断＋K 不变本质；三段式算 K 与转化率；等效平衡两模型；图像题“先拐先平数值大”口诀</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必一·第三章 水溶液中的离子反应与平衡<span class="star">★★★★</span><span class="n">4节</span><span class="dd">D14–15</span></span></summary>
+      <ul><li class="leaf"><i>3.1</i>电离平衡（Ka/Kb）</li><li class="leaf"><i>3.2</i>水的电离和溶液的 pH（Kw）</li><li class="leaf"><i>3.3</i>盐类的水解（Kh）</li><li class="leaf"><i>3.4</i>沉淀溶解平衡（Ksp）</li>
+      <li class="task">四大平衡一张图（一族常数一个思想：写 K→比大小→判方向）；三大守恒（电荷/物料/质子）快速书写；pH 计算（强酸强碱/稀释/混合）；水解应用（泡沫灭火器/明矾净水/热的纯碱去油）；Ksp 与沉淀转化——<b>全卷最难两章之一，留足 2 天</b></li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必一·第四章 化学反应与电能<span class="star">★★★</span><span class="n">3节</span><span class="dd">D16</span></span></summary>
+      <ul><li class="leaf"><i>4.1</i>原电池</li><li class="leaf"><i>4.2</i>电解池</li><li class="leaf"><i>4.3</i>金属的腐蚀与防护</li>
+      <li class="task">原电池/电解池对照表（电极名/电子流/离子移向）；电极反应式书写三步（定正负→写主干→配电荷平衡）；新型电池迁移（燃料电池/锂电）；牺牲阳极vs 外加电流</li></ul>
+    </details></li>
+    </ul>
+  </details></li>
+
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">⑤ 有机与材料 ｜ 高中·⑨ 有机官能团簇</span><span class="q">官能团决定性质（★★★★ 大块，留足 4 天）</span><span class="dd">D17–20</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D17</i>前置篇·初中十一单元红叶清剿：营养素六类｜合成材料三族（链节/单体/聚合度概念先立）</li>
+    <li><details class="dchap"><summary><span class="chap">必修二·第七章 有机化合物<span class="star">★★★</span><span class="n">4节</span><span class="dd">D17</span></span></summary>
+      <ul><li class="leaf"><i>7.1</i>认识有机化合物</li><li class="leaf"><i>7.2</i>乙烯与有机高分子材料</li><li class="leaf"><i>7.3</i>乙醇与乙酸</li><li class="leaf"><i>7.4</i>基本营养物质</li>
+      <li class="task">碳四键与同系物/同分异构体辨析；乙醇乙酸官能团初体验——选必三的桥头堡</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必三·第一章 有机化合物的结构特点与研究方法<span class="star">★★★★</span><span class="n">2节</span><span class="dd">D18</span></span></summary>
+      <ul><li class="leaf"><i>1.1</i>有机化合物的结构特点</li><li class="leaf"><i>1.2</i>研究有机化合物的一般方法</li>
+      <li class="task">分离提纯与鉴定方法——⑩实验主线在有机侧的落点</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必三·第二章 烃<span class="star">★★★★</span><span class="n">3节</span><span class="dd">D18</span></span></summary>
+      <ul><li class="leaf"><i>2.1</i>烷烃</li><li class="leaf"><i>2.2</i>烯烃 炔烃</li><li class="leaf"><i>2.3</i>芳香烃</li>
+      <li class="task">三类烃“结构→典型反应（取代/加成/聚合）→鉴别”矩阵；同分异构体书写（碳链/位置/官能团三维排查）</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必三·第三章 烃的衍生物<span class="star">★★★★</span><span class="n">5节</span><span class="dd">D19</span></span></summary>
+      <ul><li class="leaf"><i>3.1</i>卤代烃</li><li class="leaf"><i>3.2</i>醇 酚</li><li class="leaf"><i>3.3</i>醛 酮</li><li class="leaf"><i>3.4</i>羧酸 羧酸衍生物</li><li class="leaf"><i>3.5</i>有机合成</li>
+      <li class="task">官能团性质矩阵（取代/加成/氧化/还原 × 十大官能团）——有机推断的字典；酯化/水解双向箭头；银镜反应与新制氢氧化铜检验</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必三·第四章 生物大分子<span class="star">★★★★</span><span class="n">3节</span><span class="dd">D20</span></span></summary>
+      <ul><li class="leaf"><i>4.1</i>糖类</li><li class="leaf"><i>4.2</i>蛋白质</li><li class="leaf"><i>4.3</i>核酸</li></ul>
+    </details></li>
+    <li><details class="dchap"><summary><span class="chap">选必三·第五章 合成高分子<span class="star">★★★★</span><span class="n">2节</span><span class="dd">D20</span></span></summary>
+      <ul><li class="leaf"><i>5.1</i>合成高分子的基本方法</li><li class="leaf"><i>5.2</i>高分子材料</li>
+      <li class="task">加聚/缩聚方程式书写（从单体推聚合物、从聚合物反推单体双向练）——衔接初中“链节/单体”概念</li></ul>
+    </details></li>
+    </ul>
+  </details></li>
+
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">① 走进化学与实验 ｜ 高中·⑩ 实验探究簇</span><span class="q">结论凭什么可信？（方法主线，不占独立日）</span><span class="dd">D6–20 贯穿</span></span></summary>
+    <ul>
+    <li class="leaf">方法主线叶片长在其他九簇各章内：分离提纯 → 气体制备净化收集 → 检验 → 定量（滴定）→ 方案设计与评价</li>
+    <li class="task">每天例题组固定带 1 道实验题（当天所学簇的实验落点）；仪器操作与安全规范随题积累——阶段三实验大题的地基</li>
+    </ul>
+  </details></li>
+  <li class="gates">出口闸门②：高中 ★★★ 及以上章（必一 2/3/4、必修二 5/7、选必一 2/3/4、选必三 1–5）闭卷自测 ≥80% ｜ 初中红叶清剿 ≥70% ｜ 错题本建立 —— 达标才进阶段三</li>
+  </ul>
+</details></li>
+
+<!-- ═══════ 阶段三 融会贯通 D21-32 ═══════ -->
+<li><details class="dstg"><summary><span class="stg s3">阶段三 · 融会贯通</span><span class="d">D21–32</span><small>织网络 —— 跨簇联结、举一反三，豁然贯通</small></summary>
+  <ul>
+  <li class="stgline"><b>阶段目标：</b>三大跨簇题型（工业流程/实验探究/有机推断）各个击破；合上书重绘整棵树；错题二错率 &lt;20%。<b>AP 对标：</b>Big Ideas 跨单元综合——考的不是孤立知识点，是簇之间的桥。</li>
+  <li class="stgline"><span class="psy">生成效应（合上书重画整树导图，提取比重读强）</span><span class="psy">交错练习（三题型轮转，促辨别）</span><span class="psy">精细加工（自问“为什么/如果…会怎样”）</span></li>
+
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">专题一 · 工业流程大题</span><span class="q">⑤元素化合物 × ④位构性 × ⑥⑦⑧原理——一张流程图考半本书</span><span class="dd">D21–24</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D21</i>流程主线拆解：原料预处理（粉碎/煅烧）→浸取→净化除杂→分离→产品——每一步的化学 purpose</li>
+    <li class="leaf"><i>D22</i>除杂与调 pH 类套路（Ksp 计算＋离子方程式书写；“先沉谁后沉谁”两步判断）</li>
+    <li class="leaf"><i>D23</i>产率/纯度计算＋绿色化学评价句式（循环利用/能量利用/原子经济性三件套）</li>
+    <li class="leaf"><i>D24</i>限时训练：流程题 3 套（每套 25 分钟）——硫酸工业/侯氏制碱/金属冶炼为母题</li>
+    </ul>
+  </details></li>
+
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">专题二 · 实验探究大题</span><span class="q">⑩实验探究簇 × 全部九簇——结论凭什么可信？</span><span class="dd">D25–28</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D25</i>气体制备-净化-收集-检验全链设计模板（O₂/NH₃/Cl₂/SO₂ 四气通用；干燥剂选择三问）</li>
+    <li class="leaf"><i>D26</i>探究题变量控制思维（自变量/因变量/无关变量三问；“其他条件相同”为什么必须）</li>
+    <li class="leaf"><i>D27</i>滴定类定量实验三位一体（操作规范→计算（c=固定式）→误差分析“偏高偏低”速判）</li>
+    <li class="leaf"><i>D28</i>方案设计与评价题答题模板（目的→操作→现象→结论四段式；对照实验设计）——限时 3 套</li>
+    </ul>
+  </details></li>
+
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">专题三 · 有机推断与合成</span><span class="q">⑨有机簇收口——线索词典＋双向合成</span><span class="dd">D29–31</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D29</i>有机推断信息词表（颜色/状态/反应类型/分子量线索词典；官能团性质矩阵倒背）</li>
+    <li class="leaf"><i>D30</i>限制条件同分异构体计数套路（按官能团分类枚举；等效氢判断对称性）</li>
+    <li class="leaf"><i>D31</i>合成路线设计三板斧（官能团引入/转化/保护）；顺推＋逆推双向夹击实战 6 题</li>
+    </ul>
+  </details></li>
+
+  <li><details class="dclu"><summary><span class="cluster"><span class="chip">收口 · 全树串联</span><span class="q">五簇十簇连成一张网</span><span class="dd">D32</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D32</i><b>合书重绘整棵树</b>：初中 11 单元＋高中 10 簇画成一张导图（画不出的就是黄/红叶，当天补）；跨簇综合卷 1 套（阶段验收）</li>
+    </ul>
+  </details></li>
+  <li class="gates">出口闸门③：三大专题限时卷 ≥75% ｜ 合书导图覆盖初中 11 单元＋高中 10 簇完整度 ≥80% ｜ 错题二错率 &lt;20% —— 达标才进阶段四</li>
+  </ul>
+</details></li>
+
+<!-- ═══════ 阶段四 炉火纯青 D33-41 ═══════ -->
+<li><details class="dstg"><summary><span class="stg s4">阶段四 · 炉火纯青</span><span class="d">D33–41</span><small>淬实战 —— 全真模拟百炼成钢，锋刃出于磨石</small></summary>
+  <ul>
+  <li class="stgline"><b>阶段目标：</b>5 套全真限时模拟＋4 个深度归因日；分数曲线企稳；应试策略固化成肌肉记忆。<b>AP 对标：</b>Full-length Practice Exams ＋ 逐题 Error Analysis（模考→复盘→补漏→再模考）。</li>
+  <li class="stgline"><span class="psy">压力接种（全真环境反复暴露→考场脱敏）</span><span class="psy">目标梯度效应（分数曲线上墙，越近终点越加速）</span><span class="psy">峰值体验记录（每次模拟后记“今日最佳解”）</span></li>
+  <li><details class="dclu" open><summary><span class="cluster"><span class="chip">全科动作</span><span class="dd">D33–41</span></span></summary>
+    <ul>
+    <li class="leaf"><i>D33/35/37/39/41</i><b>全真模拟日</b>：完全按考试时长执行（含涂卡）；晚间只做轻归因（标记不深挖）</li>
+    <li class="leaf"><i>D34/36/38/40</i><b>深度归因日</b>：每道错题过“错因四分法”——<b>知识型</b>（回树上定位补章）/<b>审题型</b>（圈画关键词训练）/<b>方法型</b>（模板重练）/<b>时间型</b>（节奏调整）</li>
+    <li class="leaf"><b>高频考点清剿</b>：化学“最后 20 个必考点”清单（按 10 年真题频次排序：三段式算 K/电极反应式/水解应用/有机推断…）逐个确认击破</li>
+    <li class="leaf"><b>方程式规范专项</b>：条件/状态符号/配平/离子方程式拆写四查——规范分一分不丢</li>
+    <li class="leaf"><b>应试策略卡</b>定稿：时间分配（选择 X 分钟/大题 Y 分钟）/先易后难路线/“放弃线”（卡 5 分钟即跳）/检查流程</li>
+    </ul>
+  </details></li>
+  <li class="gates">出口闸门④：5 套限时卷完成、分数曲线浮动 &lt;10%（企稳）｜ 错因分布从知识型主导 → 方法/时间型主导 ｜ 应试策略卡定稿 —— 达标才进阶段五</li>
+  </ul>
+</details></li>
+
+<!-- ═══════ 阶段五 妙笔生花 D42-44 + D45 ═══════ -->
+<li><details class="dstg"><summary><span class="stg s5">阶段五 · 妙笔生花</span><span class="d">D42–44</span><small>调巅峰 —— 胸有成竹，笔下生辉；只保温不攻坚</small></summary>
+  <ul>
+  <li class="stgline"><b>阶段目标：</b>全树“一页纸”过完；2 套手感卷；作息对齐考试时段；以连胜心态上场。<b>AP 对标：</b>Final Review ＋ Exam-day Readiness（考前只做巩固与状态管理，不学新内容）。</li>
+  <li class="stgline"><span class="psy">峰终定律（每天以一次“完整做对”收尾，给 45 天一个高锋终点）</span><span class="psy">自我效能储蓄（重读 D1 基线→D41 曲线的进步证据）</span><span class="psy">耶克斯-多德森（适度紧张=最佳唤醒；睡眠 ≥7.5h 是记忆巩固底线）</span></li>
+  <li><details class="dclu" open><summary><span class="cluster"><span class="chip">全科动作</span><span class="dd">D42–44</span></span></summary>
+    <ul>
+    <li class="leaf"><b>化学“一页纸”</b>（自己抄写浓缩——生成效应最大化）：高频考点＋易错警示＋方程式必背 30 条＋答题模板句</li>
+    <li class="leaf"><i>D42/D43</i><b>手感卷 ×2</b>：轻模拟不追分，保持“考试的肌肉记忆”</li>
+    <li class="leaf"><b>末轮默写</b>：元素周期表主族/溶解性表/金属活动性顺序/化合价口诀——默写化检验</li>
+    <li class="leaf"><b>作息对齐</b>：按考试时段安排当天最高强度脑力活动（生物钟预演）；考场演练（文具/证件/路线）</li>
+    <li class="leaf"><b>每晚收获仪式</b>：记录“今天我掌握了___”（进步原理收官）</li>
+    </ul>
+  </details></li>
+  <li class="gates">出口闸门⑤：一页纸过完 ｜ 2 套手感卷完成 ｜ 睡眠 ≥7.5h 连续 3 晚 ｜ 文具证件齐备 —— 满足即巅峰状态就位</li>
+  </ul>
+</details></li>
+
+<!-- ═══════ D45 点睛 ═══════ -->
+<li><details class="dstg"><summary><span class="stg s6">D45 · 执笔点睛</span><span class="d">上场日</span><small>只带版图与证据上场，不带新题</small></summary>
+  <ul>
+  <li class="stgline"><span class="psy">心理预演（成功画面想象）</span><span class="psy">峰终设计（考后收获仪式：45 天成长档案封存——这 45 天本身就是作品）</span></li>
+  <li class="leaf"><i>晨</i>轻仪式：翻看三色全绿版图与进步曲线 10 分钟——证据链就是底气；不做任何新题</li>
+  <li class="leaf"><i>进场前</i>三次深呼吸锚点＋“如数家珍→妙笔生花”默念一遍（45 天叙事完整闭环）</li>
+  <li class="leaf"><i>考后</i>收获仪式：封存错题本/一页纸/曲线图，写下“45 天前 vs 现在”对比——为下一次冲刺储自信</li>
+  </ul>
+</details></li>
+
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="panel">
+  <h3>每日节律（全程固定 —— 降低决策损耗，让习惯接管执行；单科冲刺日强度 ≈ 4h＋1h）</h3>
+  08:00–10:00 <b>主学习块①</b>（当日簇精讲：前置篇补漏→高中章要点）→ 10:15–12:00 <b>例题组</b>（85% 难度校准＋固定带 1 道实验题）→ 午休＋小睡 ≤25min → 14:00–15:30 <b>综合练习</b>（阶段二起：跨章/跨簇题）→ 15:45–16:30 <b>闭卷自测＋错题归因</b>（与 AI 考官对话）→ 19:30–20:00 <b>记忆窗口</b>（方程式卡片/元素符号/性质口诀——间隔重复调度）→ 20:00–20:15 <b>点亮仪式</b>（在树上把今日掌握的叶标绿）＋明日 if-then 计划（“如果明早卡在 X，就先做 Y”）→ 23:00 前入睡（≥7.5h）
+</div>
+
+<div class="panel">
+  <h3>AI 用法 · 三条纪律（防“拐杖效应”——依据 Bastani et al. 2025, PNAS：无护栏 AI 撤除后成绩 −17%，带护栏反而 +127%）</h3>
+  <p class="ai-rule">纪律一 · 练习模式优先：先闭卷做，后对答案问 AI——AI 不在手边陪做题。</p>
+  <p class="ai-rule">纪律二 · 提示阶梯：要求 AI 给“方向提示→方法提示→关键一步→对答案”四层提示，每题最多爬两层就自己走（苏格拉底式，不放答案）。</p>
+  <p class="ai-rule">纪律三 · 归因对话：每晚错题与 AI 对话复盘，让 AI 扮演考官追问“你当时为什么这么想”，说出错因才算过关。</p>
+  <div style="color:var(--dim);margin-top:6px">AI 在本结构中的四角色：诊断师（D1–5 漏洞-簇映射）／陪练（提示阶梯＋85% 难度出题）／考官（追问归因）／调度员（间隔重复排期）。证据链见《AI论文调研-45天冲刺可行性.md》。</div>
+</div>
+
+<div class="foot">
+  母版关系：本树为 gewu-edu-site《知识树》化学分树的 45 天冲刺调度层——簇名/簇尺/章/节/★ 权重/初中前置篇全部与源树一致（初中 11 单元 35 课题＋高中 10 簇 19 章 55 节逐叶排入日程），数学/物理按需求不涉及。<br>
+  阶段命名逻辑：如数家珍（观全局）→ 庖丁解牛（拆核心）→ 融会贯通（织网络）→ 炉火纯青（淬实战）→ 妙笔生花（调巅峰）——五个成语即五级掌控感，也是布鲁姆认知层级（记忆→理解→应用→分析→创造）的螺旋上升。<br>
+  图表版：《45天化学冲刺-图表流程图.html》（甘特图·阶段流程地图·五簇旅程·每日节律·天数分配·掌控感阶梯）｜ 游戏版：《45天化学修炼场-打怪升级版.html》（怪物图鉴·称号升级·装备掉落）｜ 依据文档：《AI论文调研-45天冲刺可行性.md》（14 篇实证）·《心理学调研-结构设计依据.md》（20 项理论）｜ 七科泛化初版已存 archive/（留档不删）<br>
+  交互提示：点击 ▸ 折叠/展开；顶部按钮分级展开；URL 加 ?full=1 全展开 ｜ 2026-10-05 · Aurora
+</div>
+
+<script>
+function setAll(open){document.querySelectorAll('details').forEach(d=>d.open=open)}
+function lv(cls,open){document.querySelectorAll('details.'+cls).forEach(d=>d.open=open)}
+if(location.search.includes('full=1')) setAll(true);
+</script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>45天化学冲刺 · 图表与流程地图（甘特 · 流程 · 旅程 · 节律 · 分配 · 阶梯）</title>
+<style>
+  :root{--bg:#131313;--panel:#1c1c1c;--line:#2c4a6e;--txt:#e6e6e6;--dim:#8f8f8f;
+        --c:#b29aff;--warm:#ffb020;--ok:#7ad98f;--m:#ff7ad9;--p:#6fb6ff;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei",sans-serif;width:1200px;padding:28px 34px 60px;margin:0 auto}
+  h1{font-size:25px}
+  h1 .v{color:var(--warm);font-size:13.5px;vertical-align:middle;margin-left:10px}
+  .meta{color:var(--dim);font-size:12px;margin:10px 0 20px;line-height:1.7}
+  .meta b{color:#d9d9d9}
+  h2{font-size:16px;color:var(--warm);margin:34px 0 4px;font-weight:800}
+  h2 small{font-size:11.5px;color:var(--dim);font-weight:400;margin-left:10px}
+  .sub{font-size:11.5px;color:var(--dim);margin-bottom:10px;line-height:1.7}
+  .panel{background:var(--panel);border:1px solid #26364a;border-radius:10px;padding:14px 16px;margin-top:8px}
+  svg{display:block}
+  svg text{font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+  table.det{border-collapse:collapse;font-size:11px;width:100%;margin-top:10px}
+  table.det th,table.det td{border:1px solid #26364a;padding:4px 8px;text-align:left;line-height:1.6;vertical-align:top}
+  table.det th{background:#1a2432;color:#cfe0f5;font-size:11px;white-space:nowrap}
+  table.det td.k{color:var(--warm);font-weight:700;white-space:nowrap}
+  .dayflow{display:flex;gap:5px;align-items:stretch;margin-top:6px}
+  .dcard{flex:1;min-width:0;background:var(--panel);border:1px solid #2b4059;border-top:3px solid var(--p);border-radius:8px;padding:8px 9px;font-size:10.5px;line-height:1.55}
+  .dcard b{display:block;font-size:11.5px;color:#fff;margin-bottom:2px}
+  .dcard .t{color:var(--warm);font-weight:800;font-size:10.5px;display:block;margin-bottom:3px}
+  .dcard.gate{border-top-color:var(--ok)}
+  .dcard.mem{border-top-color:var(--m)}
+  .darrow{align-self:center;color:var(--dim);font-size:12px;flex:0 0 auto}
+  table.journey{width:100%;border-collapse:separate;border-spacing:4px}
+  table.journey th{font-size:11px;color:#cfe0f5;background:#1a2432;border-radius:6px;padding:6px 8px;font-weight:700;text-align:left}
+  table.journey td{background:var(--panel);border:1px solid #26364a;border-radius:8px;padding:7px 9px;font-size:10.5px;line-height:1.65;vertical-align:top}
+  table.journey td.badge{white-space:nowrap;font-weight:800;color:#141414;border-radius:20px;text-align:center;font-size:11.5px;padding:8px 10px;width:120px}
+  .b1{background:#8fa8c8}.b2{background:var(--c)}.b3{background:var(--ok)}.b4{background:var(--warm)}.b5{background:var(--m)}
+  table.journey td .st{color:var(--warm);font-weight:700}
+  .brow{display:flex;align-items:center;margin:7px 0;font-size:11.5px}
+  .brow .lb{flex:0 0 240px;color:#d9d9d9;font-weight:600}
+  .brow .track{flex:1;background:#1a1a1a;border-radius:5px;height:18px;position:relative}
+  .brow .fill{height:100%;border-radius:5px;min-width:26px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;color:#141414;font-size:9.5px;font-weight:800}
+  .brow .val{flex:0 0 130px;margin-left:10px;color:var(--dim);font-size:11px}
+  .foot{margin-top:34px;border-top:1px solid #262626;padding-top:12px;color:var(--dim);font-size:11.5px;line-height:1.9}
+</style>
+</head>
+<body>
+<a href="./index.html" title="回到 3D 元素周期表" style="position:fixed;top:14px;right:16px;z-index:9;background:#221c36;border:1px solid #4a3f6a;color:#cfc6e8;border-radius:8px;padding:6px 13px;font-size:11.5px;text-decoration:none"
+   onmouseover="this.style.borderColor='#f0c060';this.style.color='#f0c060'" onmouseout="this.style.borderColor='#4a3f6a';this.style.color='#cfc6e8'">⤺ 3D 元素周期表</a>
+<h1>45天化学冲刺 · 图表与流程地图<span class="v">图表版 · 与《45天化学冲刺结构树.html》同源数据 · 2026 口径</span></h1>
+<div class="meta">
+  本页把结构树数据重绘为六张图：<b>① 45天泳道甘特图</b>（哪天干什么，一屏看全）→ <b>② 阶段流程地图</b>（五阶段流转＋出口闸门判定回环）→ <b>③ 五簇旅程图</b>（每个融合簇的 45 天完整旅程）→ <b>④ 每日节律＋每章三步闭环</b>（执行层）→ <b>⑤ 天数分配条形图</b>（时间都给了谁）→ <b>⑥ 掌控感阶梯</b>（五阶段＝五级认知层级递升）。甘特色块悬停可见完整任务说明。
+</div>
+
+<h2>图一 · 45天泳道甘特图<small>横轴 D1–D45；顶带＝六阶段；泳道＝内容主线；悬停色块看完整说明</small></h2>
+<div class="sub">★ 权重照搬知识树；虚竖线＝阶段闸门分界；图下附泳道任务明细表</div>
+<div class="panel">
+<svg id="gantt" viewBox="0 0 1180 404" width="1180" height="404"></svg>
+<table class="det">
+  <tr><th style="width:130px">泳道</th><th>任务明细（与甘特色块一一对应）</th></tr>
+  <tr><td class="k">全科·诊断与仪式</td><td>D1–2 首套全真诊断卷（基线落档）｜ D3 化学用语摸底·方程式30题 ｜ D5 AI 漏洞-簇映射报告＋优先级表</td></tr>
+  <tr><td class="k">全真模拟与归因</td><td>D33/35/37/39/41 全真模拟（实心块）｜ D34/36/38/40 深度归因日（错因四分法）｜ D42/43 手感卷×2 ｜ D44 末轮默写 ｜ D45 执笔点睛</td></tr>
+  <tr><td class="k">跨簇专题</td><td>D21–24 工业流程大题（⑤×④×⑥⑦⑧）｜ D25–28 实验探究大题（⑩×全簇）｜ D29–31 有机推断与合成（⑨收口）｜ D32 合书重绘整树＋跨簇综合卷</td></tr>
+  <tr><td class="k">① 走进化学与实验</td><td>D2 初中一单元三色＋⑩方法主线预热 ｜ D6–20 方法主线贯穿每日例题（分离提纯→气体制备→检验→定量滴定→方案评价）</td></tr>
+  <tr><td class="k">② 物质构成与结构</td><td>D2 初中三·四单元三色 ｜ D8–9 高中④位构性簇：必一4章 ★★★ ＋ 选必二1–3章 ★★</td></tr>
+  <tr><td class="k">③ 身边的化学物质</td><td>D3–4 初中二·六·八·十单元三色（初中主战场）｜ D10–11 高中⑤元素化合物簇：1.1物质分类＋必一2章钠氯·3章铁 ★★★＋必修二5章硫氮 · 8章化工</td></tr>
+  <tr><td class="k">④ 反应·定量·溶液·能量</td><td>D4 初中五·七·九单元三色 ｜ D6–7 高中①物质的量＋②氧化还原（先修工具）★★★ ｜ D12–16 高中⑥平衡★★★★·⑦水溶液★★★★（2天）·⑧电化学★★★·反应热★★</td></tr>
+  <tr><td class="k">⑤ 有机与材料</td><td>D5 初中十一单元三色 ｜ D17–20 高中⑨有机官能团簇：必修二7章 ★★★→选必三1–5章 ★★★★（4天大块）</td></tr>
+</table>
+</div>
+
+<h2>图二 · 阶段流程地图<small>五阶段＋点睛日主干流转；菱形＝出口闸门（达标放行，不达标金色虚线回环补漏）</small></h2>
+<div class="panel">
+<svg id="flow" viewBox="0 0 1180 470" width="1180" height="470"></svg>
+</div>
+
+<h2>图三 · 五簇旅程图<small>同一行读完一个融合簇从测绘到点睛的完整旅程（列＝阶段）</small></h2>
+<div class="panel">
+<table class="journey">
+  <tr><th style="width:120px">融合簇</th><th>一如数家珍 D1–5</th><th>二庖丁解牛 D6–20</th><th>三融会贯通 D21–32</th><th>四炉火纯青 D33–41</th><th>五妙笔生花 D42–44＋D45</th></tr>
+  <tr><td class="badge b1">① 走进化学与实验</td>
+    <td>初中一单元三色；⑩方法主线预热（五环节地图）</td>
+    <td><span class="st">方法主线贯穿 D6–20</span>：每天例题带1道实验题，叶片长在各簇章内</td>
+    <td><span class="st">主战场 D25–28</span>：实验探究大题——气体制备全链/变量控制/滴定定量/方案评价</td>
+    <td>实验题规范表达（操作-现象-结论三段式）固化</td>
+    <td>易错操作清单末扫（检纯/防倒吸/温度计位置…）</td></tr>
+  <tr><td class="badge b2">② 物质构成与结构</td>
+    <td>初中三·四单元三色（分子原子/化合价）</td>
+    <td>D8–9 ④位构性簇：必一4章位构性三角 ★★★＋选必二1–3章 ★★（VSEPR/晶胞均摊）</td>
+    <td>D21–24 工业流程题的结构侧（除杂调pH/Ksp）＋D32 重绘整树</td>
+    <td>周期律图像题速判（半径/金属性/电离能趋势）</td>
+    <td>周期表主族默写化</td></tr>
+  <tr><td class="badge b3">③ 身边的化学物质</td>
+    <td>初中二·六·八·十单元三色（初中主战场，红叶最多处）</td>
+    <td>D10–11 ⑤元素化合物簇：1.1分类＋必一2章钠氯/3章铁 ★★★＋必修二5章硫氮/8章化工</td>
+    <td><span class="st">主战场 D21–24</span>：工业流程大题（钠氯铁硫氮是原料库；绿色化学评价）</td>
+    <td>流程题套路固化（预处理→浸取→净化→分离→产品）</td>
+    <td>颜色/溶解性速查表默写</td></tr>
+  <tr><td class="badge b4">④ 反应·定量·溶液·能量</td>
+    <td>初中五·七·九单元三色（守恒/燃烧/溶液）</td>
+    <td><span class="st">最难链 D6–16</span>：①物质的量＋②氧化还原工具先行 → ⑥平衡 ★★★★ → ⑦水溶液 ★★★★（2天）→ ⑧电化学 ★★★</td>
+    <td>D21–24 流程题原理侧（三段式/Ksp计算）＋图像综合题</td>
+    <td>原理图像题口诀化（先拐先平/等效判断）；电极反应式规范</td>
+    <td>守恒法口诀＋热化学方程式末轮</td></tr>
+  <tr><td class="badge b5">⑤ 有机与材料</td>
+    <td>初中十一单元三色（营养素/合成材料概念）</td>
+    <td><span class="st">大块 D17–20</span>：⑨有机官能团簇——必修二7章 ★★★→选必三1–5章 ★★★★（官能团矩阵字典）</td>
+    <td><span class="st">主战场 D29–31</span>：有机推断与合成——信息词表/同分异构计数/双向合成</td>
+    <td>信息迁移题固化（新情境→旧官能团）</td>
+    <td>官能团矩阵＋加聚缩聚末轮</td></tr>
+</table>
+</div>
+
+<h2>图四 · 每日节律＋每章三步闭环<small>上：一天怎么过（全程固定）；下：每一章怎么过（阶段二主体循环）</small></h2>
+<div class="panel">
+  <div class="dayflow">
+    <div class="dcard mem"><span class="t">07:00–07:30</span><b>记忆窗口①</b>方程式卡片/元素符号/口诀（间隔重复调度）</div>
+    <div class="darrow">→</div>
+    <div class="dcard"><span class="t">08:00–10:00</span><b>主学习块</b>当日簇精讲：前置篇补漏 → 高中章要点</div>
+    <div class="darrow">→</div>
+    <div class="dcard"><span class="t">10:15–12:00</span><b>例题组</b>85% 难度校准 ＋ 固定带 1 道实验题（⑩主线）</div>
+    <div class="darrow">→</div>
+    <div class="dcard"><span class="t">14:00–15:30</span><b>综合练习</b>跨章/跨簇题（阶段三起为专题题组）</div>
+    <div class="darrow">→</div>
+    <div class="dcard gate"><span class="t">15:45–16:30</span><b>自测＋AI归因</b>闭卷自测；错题过"你当时为什么这么想"</div>
+    <div class="darrow">→</div>
+    <div class="dcard mem"><span class="t">19:30–20:00</span><b>记忆窗口②</b>当日卡片复轮（FSRS 排期）</div>
+    <div class="darrow">→</div>
+    <div class="dcard gate"><span class="t">20:00–20:15</span><b>点亮＋if-then</b>树叶标绿；写"明早卡在X就先做Y"</div>
+    <div class="darrow">→</div>
+    <div class="dcard"><span class="t">23:00 前</span><b>入睡 ≥7.5h</b>睡眠＝记忆巩固底线（闸门⑤硬指标）</div>
+  </div>
+  <svg id="loop" viewBox="0 0 1120 190" width="1120" height="190" style="margin-top:14px"></svg>
+</div>
+
+<h2>图五 · 天数分配条形图<small>45 天都给了谁（合计 45 天对拍）</small></h2>
+<div class="panel">
+  <div class="brow"><div class="lb">测绘诊断（如数家珍）</div><div class="track"><div class="fill" style="width:11.1%;background:#6fb6ff">5</div></div><div class="val">D1–5 · 5 天</div></div>
+  <div class="brow"><div class="lb">①物质的量＋②氧化还原（工具）</div><div class="track"><div class="fill" style="width:4.4%;background:#ffb020">2</div></div><div class="val">D6–7 · 2 天</div></div>
+  <div class="brow"><div class="lb">④位构性簇</div><div class="track"><div class="fill" style="width:4.4%;background:#b29aff">2</div></div><div class="val">D8–9 · 2 天</div></div>
+  <div class="brow"><div class="lb">⑤元素化合物簇</div><div class="track"><div class="fill" style="width:4.4%;background:#7ad98f">2</div></div><div class="val">D10–11 · 2 天</div></div>
+  <div class="brow"><div class="lb">⑥⑦⑧原理三簇（最难链）</div><div class="track"><div class="fill" style="width:11.1%;background:#ffb020">5</div></div><div class="val">D12–16 · 5 天</div></div>
+  <div class="brow"><div class="lb">⑨有机官能团簇（大块）</div><div class="track"><div class="fill" style="width:8.9%;background:#ff7ad9">4</div></div><div class="val">D17–20 · 4 天</div></div>
+  <div class="brow"><div class="lb">跨簇三大专题（融会贯通）</div><div class="track"><div class="fill" style="width:26.7%;background:#b29aff">12</div></div><div class="val">D21–32 · 12 天</div></div>
+  <div class="brow"><div class="lb">全真模拟＋归因（炉火纯青）</div><div class="track"><div class="fill" style="width:20%;background:#ffb020">9</div></div><div class="val">D33–41 · 9 天</div></div>
+  <div class="brow"><div class="lb">巅峰保温（妙笔生花）</div><div class="track"><div class="fill" style="width:6.7%;background:#ff7ad9">3</div></div><div class="val">D42–44 · 3 天</div></div>
+  <div class="brow"><div class="lb">执笔点睛（上场日）</div><div class="track"><div class="fill" style="width:2.2%;background:#ff5f5f">1</div></div><div class="val">D45 · 1 天</div></div>
+  <div style="color:var(--dim);font-size:11px;margin-top:8px">对拍：5+2+2+2+5+4+12+9+3+1 = 45 ✓ ｜ 阶段二精讲合计 15 天（含⑩实验主线贯穿），阶段三专题 12 天＝三大专题＋D32 整树重绘</div>
+</div>
+
+<h2>图六 · 掌控感阶梯<small>五阶段＝布鲁姆认知层级五级递升，每个阶段名都是一级"掌握者"身份</small></h2>
+<div class="panel">
+<svg id="ladder" viewBox="0 0 1120 330" width="1120" height="330"></svg>
+</div>
+
+<div class="foot">
+  图表版与《45天化学冲刺结构树.html》（逐叶明细）·《45天化学修炼场-打怪升级版.html》（游戏化执行层）·《AI论文调研-45天冲刺可行性.md》·《心理学调研-结构设计依据.md》同源 ｜ 数据口径：初中 11 单元 35 课题 ＋ 高中 10 簇 19 章 55 节 ｜ 甘特/流程/阶梯均为脚本生成，改排期只改脚本数据 ｜ 2026-10-05 · Aurora
+</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;if(a&&a.title){const ti=document.createElementNS(NS,'title');ti.textContent=a.title;e.appendChild(ti);}return e;}
+function attach(id){return document.getElementById(id);}
+
+/* ═══ 图1 甘特 ═══ */
+(function(){
+  const svg=attach('gantt'); if(!svg)return;
+  const X0=178,CW=22,RH=36,Y0=64;
+  const lanes=[
+    {name:'全科·诊断与仪式',color:'#9aa7b8'},
+    {name:'全真模拟与归因',color:'#ffb020'},
+    {name:'跨簇专题（阶段三）',color:'#7ad98f'},
+    {name:'① 走进化学与实验',color:'#8fa8c8'},
+    {name:'② 物质构成与结构',color:'#b29aff'},
+    {name:'③ 身边的化学物质',color:'#7ad98f'},
+    {name:'④ 反应·定量·溶液·能量',color:'#ffb020'},
+    {name:'⑤ 有机与材料',color:'#ff7ad9'},
+  ];
+  const stages=[
+    {name:'如数家珍',d:[1,5],c:'#6fb6ff'},
+    {name:'庖丁解牛',d:[6,20],c:'#7ad98f'},
+    {name:'融会贯通',d:[21,32],c:'#b29aff'},
+    {name:'炉火纯青',d:[33,41],c:'#ffb020'},
+    {name:'妙笔生花',d:[42,44],c:'#ff7ad9'},
+    {name:'点睛',d:[45,45],c:'#ff5f5f'},
+  ];
+  stages.forEach(s=>{
+    const x=X0+(s.d[0]-1)*CW,w=(s.d[1]-s.d[0]+1)*CW;
+    svg.appendChild(el('rect',{x,y:8,width:w-2,height:20,rx:5,fill:s.c,opacity:.92}));
+    svg.appendChild(el('text',{x:x+w/2-1,y:22,'text-anchor':'middle',fill:'#141414','font-size':w<30?9:10.5,'font-weight':800},w<26?s.name[0]:s.name+(w>80?' D'+s.d[0]+'–'+s.d[1]:'')));
+  });
+  for(let d=1;d<=45;d+=5) svg.appendChild(el('text',{x:X0+(d-1)*CW+CW/2,y:42,'text-anchor':'middle',fill:'#8f8f8f','font-size':9},'D'+d));
+  lanes.forEach((ln,i)=>{
+    const y=Y0+i*RH;
+    if(i%2===0) svg.appendChild(el('rect',{x:X0,y:y-2,width:45*CW,height:RH-3,fill:'#171717'}));
+    svg.appendChild(el('rect',{x:8,y:y+3,width:10,height:18,rx:3,fill:ln.color}));
+    svg.appendChild(el('text',{x:24,y:y+16,fill:'#d9d9d9','font-size':11,'font-weight':700},ln.name));
+  });
+  [5.5,20.5,32.5,41.5,44.5].forEach(dd=>{
+    svg.appendChild(el('line',{x1:X0+(dd-1)*CW,y1:Y0-6,x2:X0+(dd-1)*CW,y2:Y0+8*RH-8,stroke:'#3d5a80','stroke-width':1,'stroke-dasharray':'3 3',opacity:.7}));
+  });
+  const blocks=[
+    [0,1,2,'诊断卷','D1–2 首套全真诊断卷（目标学段真题·按考试时长）——基线分落档'],
+    [0,3,1,'用语','D3 化学用语摸底：方程式书写30题（配平/条件/状态/离子方程式）'],
+    [0,5,1,'AI','D5 AI 漏洞-簇映射报告＋个人优先级表'],
+    [1,33,1,'真1','D33 全真模拟①（按考试时长＋涂卡）',1],[1,34,1,'归1','D34 深度归因①：错因四分法'],
+    [1,35,1,'真2','D35 全真模拟②',1],[1,36,1,'归2','D36 深度归因②'],
+    [1,37,1,'真3','D37 全真模拟③',1],[1,38,1,'归3','D38 深度归因③'],
+    [1,39,1,'真4','D39 全真模拟④',1],[1,40,1,'归4','D40 深度归因④'],
+    [1,41,1,'真5','D41 全真模拟⑤',1],
+    [1,42,1,'手1','D42 手感卷①（轻模拟不追分）'],[1,43,1,'手2','D43 手感卷②'],
+    [1,44,1,'默写','D44 末轮默写：周期表/溶解性/活动性/化合价'],
+    [1,45,1,'点睛','D45 执笔点睛：轻仪式＋预演＋进场',2],
+    [2,21,4,'工业流程大题 ⑤×④×原理','D21–24 专题一·工业流程：主线拆解→除杂调pH/Ksp→产率绿色化学→限时3套'],
+    [2,25,4,'实验探究大题 ⑩×全簇','D25–28 专题二·实验探究：气体制备全链→变量控制→滴定定量→方案设计与评价'],
+    [2,29,3,'有机推断合成 ⑨','D29–31 专题三·有机：信息词表→同分异构计数→合成路线双向设计'],
+    [2,32,1,'重绘','D32 合书重绘整棵树导图＋跨簇综合卷（阶段验收）'],
+    [3,2,1,'初①','D2 初中一单元三色：物质的变化和性质｜化学实验与科学探究'],
+    [3,6,15,'⑩ 方法主线贯穿每日例题（分离提纯 → 气体制备净化收集 → 检验 → 定量滴定 → 方案设计与评价）','D6–20 实验方法主线不占独立日：每天例题组固定带1道实验题（当天所学簇的实验落点）'],
+    [4,2,1,'初②','D2 初中三单元（分子原子/原子结构/元素）＋四单元（水资源/水的组成/化学式化合价）三色'],
+    [4,8,2,'④ 位构性簇 ★★★','D8 必一4章物质结构周期律 ★★★（位构性三角互推）｜D9 选必二1–3章 ★★（电离能电负性/VSEPR/晶胞均摊）'],
+    [5,3,2,'初中二·六·八·十单元（主战场）','D3–4 初中二单元（空气氧气）·六单元（碳及氧化物）·八单元（金属活动性）·十单元（酸碱盐复分解）三色——初中红叶最多处'],
+    [5,10,2,'⑤ 元素化合物簇 ★★★','D10 物质分类1.1＋必一2章钠氯 ★★★｜D11 必一3章铁 ★★★＋必修二5章硫氮 ★★★＋8章化工 ★★'],
+    [6,4,1,'初④','D4 初中五单元（质量守恒/化学方程式）·七单元（燃烧化石能源）·九单元（溶液溶解度质量分数）三色'],
+    [6,6,2,'① 物质的量＋② 氧化还原 ★★★','D6 ①物质的量簇（NA/M/Vm/c四座桥·必一2.3）｜D7 ②氧化还原簇（配平双守恒·强制弱·必一1.3）——先修工具'],
+    [6,12,5,'⑥ 平衡★★★★·⑦ 水溶液★★★★·⑧ 电化学★★★','D12 反应热/盖斯 ★★＋必修二6章｜D13 选必一2章速率平衡 ★★★★（三段式/K/等效平衡）｜D14–15 选必一3章水溶液四大平衡 ★★★★（三大守恒/Ksp·留足2天）｜D16 选必一4章电化学 ★★★（电极反应式三步/新型电池）'],
+    [7,5,1,'初⑤','D5 初中十一单元三色：化学与人体健康｜有机合成材料（链节/单体/聚合度概念先立）'],
+    [7,17,4,'⑨ 有机官能团簇 ★★★★','D17 必修二7章 ★★★（碳四键/乙烯/乙醇乙酸）→D18 选必三1章＋2章烃 ★★★★（取代加成聚合矩阵）→D19 3章烃衍生物 ★★★★（官能团字典/银镜检验）→D20 4章生物大分子＋5章合成高分子 ★★★★（加聚缩聚双向）'],
+  ];
+  blocks.forEach(b=>{
+    const [li,d0,days,label,title,strong]=b;
+    const x=X0+(d0-1)*CW,y=Y0+li*RH+3,w=days*CW-2,h=RH-9;
+    const fill=strong===2?'#ff5f5f':lanes[li].color;
+    const r=el('rect',{x,y,width:w,height:h,rx:4,fill,opacity:strong?0.95:0.72,title});
+    if(!strong)r.setAttribute('stroke','#0f0f0f');
+    svg.appendChild(r);
+    const fs=days>=4?10:(days>=2?9:8);
+    const maxChars=Math.max(0,Math.floor((w-2)/fs));
+    const tx=label.length>maxChars?label.slice(0,maxChars):label;
+    svg.appendChild(el('text',{x:x+w/2,y:y+h/2+3.5,'text-anchor':'middle',fill:'#101010','font-size':fs,'font-weight':700,title},tx));
+  });
+  svg.appendChild(el('text',{x:X0,y:Y0+8*RH+14,fill:'#8f8f8f','font-size':10},'图例：亮色实心＝模拟日/高权重主攻（悬停看完整说明）｜ 竖虚线＝阶段闸门分界 ｜ 泳道左色条＝对应融合簇'));
+})();
+
+/* ═══ 图2 流程地图 ═══ */
+(function(){
+  const svg=attach('flow'); if(!svg)return;
+  svg.appendChild(el('defs',{})).innerHTML='<marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7d97b8"/></marker><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffb020"/></marker>';
+  const nodes=[
+    {name:'如数家珍',d:'D1–5 · 测绘',l1:'诊断卷 · 全树三色标注',l2:'AI 漏洞-簇报告',c:'#6fb6ff'},
+    {name:'庖丁解牛',d:'D6–20 · 精讲',l1:'前置篇补漏→章精讲',l2:'例题(85%)→自测≥80%',c:'#7ad98f'},
+    {name:'融会贯通',d:'D21–32 · 综合',l1:'流程/实验/有机三专题',l2:'合书重绘整树',c:'#b29aff'},
+    {name:'炉火纯青',d:'D33–41 · 实战',l1:'5套全真＋4归因日',l2:'错因四分法·策略卡',c:'#ffb020'},
+    {name:'妙笔生花',d:'D42–44 · 巅峰',l1:'一页纸·手感卷×2',l2:'作息对齐·睡眠闸门',c:'#ff7ad9'},
+    {name:'执笔点睛',d:'D45 · 上场',l1:'轻仪式·预演·进场',l2:'考后收获仪式',c:'#ff5f5f'},
+  ];
+  const gates=[
+    {t:['闸①','三色完成','基线落档+优先级表']},
+    {t:['闸②','★★★章','自测≥80%+红叶70%']},
+    {t:['闸③','专题卷≥75%','二错率<20%']},
+    {t:['闸④','曲线浮动','<10%+策略卡定稿']},
+    {t:['闸⑤','一页纸过完','睡眠3晚≥7.5h']},
+  ];
+  // 布局：两行蛇形 Row1: S1 G1 S2 G2 S3 ；Row2(右→左): G3 S4 G4 S5 G5 D45
+  const W=152,H=92,GW=118,GH=62;
+  const y1=70,y2=290;
+  const S1=[24,y1],G1=[214,y1+15],S2=[360,y1],G2=[550,y1+15],S3=[24+536,y1];          // S3 x=560
+  const G3=[214,y2+15],S4=[360,y2],G4=[550,y2+15],S5=[24+536,y2],G5=[742,y2-16],S6=[890,y2];
+  function node(n,p){
+    const [x,y]=p;
+    svg.appendChild(el('rect',{x,y,width:W,height:H,rx:12,fill:'#1c2330',stroke:n.c,'stroke-width':2.5}));
+    svg.appendChild(el('text',{x:x+W/2,y:y+26,'text-anchor':'middle',fill:'#fff','font-size':15.5,'font-weight':800},n.name));
+    svg.appendChild(el('text',{x:x+W/2,y:y+44,'text-anchor':'middle',fill:n.c,'font-size':10.5,'font-weight':700},n.d));
+    svg.appendChild(el('text',{x:x+W/2,y:y+63,'text-anchor':'middle',fill:'#c9d6e8','font-size':9.8},n.l1));
+    svg.appendChild(el('text',{x:x+W/2,y:y+79,'text-anchor':'middle',fill:'#c9d6e8','font-size':9.8},n.l2));
+  }
+  function gate(g,p){
+    const [x,y]=p,w=GW,h=GH,cx=x+w/2,cy=y+h/2;
+    svg.appendChild(el('polygon',{points:`${x},${cy} ${cx},${y} ${x+w},${cy} ${cx},${y+h}`,fill:'#102416',stroke:'#7ad98f','stroke-width':2}));
+    svg.appendChild(el('text',{x:cx,y:cy-4,'text-anchor':'middle',fill:'#7ad98f','font-size':10.5,'font-weight':800},g.t[0]+' '+g.t[1]));
+    svg.appendChild(el('text',{x:cx,y:cy+11,'text-anchor':'middle',fill:'#7ad98f','font-size':8.2},g.t[2]));
+  }
+  function arrow(x1,y1,x2,y2){
+    svg.appendChild(el('path',{d:`M${x1},${y1} L${x2},${y2}`,stroke:'#7d97b8','stroke-width':2,fill:'none','marker-end':'url(#a2)'}));
+  }
+  nodes.forEach((n,i)=>node(n,[S1,S2,S3,S4,S5,S6][i]));
+  gates.forEach((g,i)=>gate(g,[G1,G2,G3,G4,G5][i]));
+  // 主线箭头
+  arrow(S1[0]+W,y1+H/2, G1[0],y1+H/2);
+  arrow(G1[0]+GW,y1+H/2, S2[0],y1+H/2);
+  arrow(S2[0]+W,y1+H/2, G2[0],y1+H/2);
+  arrow(G2[0]+GW,y1+H/2, S3[0],y1+H/2);
+  // S3 ↓ G3
+  arrow(S3[0]+W/2,y1+H, S3[0]+W/2,y2+GH/2);
+  arrow(G3[0],y2+GH/2, S4[0],y2+H/2);
+  arrow(S4[0]+W,y2+H/2, G4[0],y2+H/2);
+  arrow(G4[0]+GW,y2+H/2, S5[0],y2+H/2);
+  arrow(S5[0]+W,y2+H/2, G5[0]+GW/2,y2+H/2);
+  arrow(G5[0]+GW/2,y2-16+GH, S6[0]+W/2,y2+H);
+  // 否·回环（金色虚线回到本阶段顶部）
+  const loops=[
+    [G1,'S1'],[G2,'S2'],[G3,'S3'],[G4,'S4'],[G5,'S5']
+  ];
+  const tops={S1:S1,S2:S2,S3:S3,S4:S4,S5:S5};
+  loops.forEach(([G,key])=>{
+    const [gx,gy]=G,[nx,ny]=tops[key];
+    const sx=gx+GW/2, sy=key==='S3'? gy+GH/2 : gy+GH;   // S3的闸③在下一行，回环向上
+    const ex=nx+W/2, ey=ny;
+    let d;
+    if(key==='S3') d=`M${sx},${sy} C${sx-30},${sy-80} ${ex+60},${ey+70} ${ex},${ey}`;
+    else if(key==='S2') d=`M${sx},${sy} C${sx},${sy+60} ${ex},${ey-60} ${ex},${ey}`;
+    else d=`M${sx},${sy} C${sx},${sy+50} ${ex},${ey-50} ${ex},${ey}`;
+    svg.appendChild(el('path',{d,stroke:'#ffb020','stroke-width':1.3,fill:'none','stroke-dasharray':'4 3',opacity:.7,'marker-end':'url(#a3)'}));
+    svg.appendChild(el('text',{x:sx+6,y:key==='S3'? sy-20:sy+16,fill:'#8f7a4a','font-size':8.5},'否·回补再验'));
+  });
+  svg.appendChild(el('text',{x:24,y:34,fill:'#8f8f8f','font-size':10.5},'实线＝闸门达标放行 ｜ 金色虚线＝未达标回环：回到本阶段补漏，补完重新过闸（不降级、不跳闸）'));
+})();
+
+/* ═══ 图4 下：每章三步闭环 ═══ */
+(function(){
+  const svg=attach('loop'); if(!svg)return;
+  svg.appendChild(el('defs',{})).innerHTML='<marker id="la" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7d97b8"/></marker><marker id="lg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7ad98f"/></marker>';
+  const steps=[
+    {t:'① 前置篇补漏',s:'初中红叶 15–30min 快清',x:60,y:30},
+    {t:'② 章精讲',s:'要点 30–40min（85%校准起点）',x:430,y:30},
+    {t:'③ 例题组',s:'60–90min ＋固定1道实验题',x:800,y:30},
+    {t:'④ 闭卷自测',s:'20min 不看书',x:620,y:130},
+  ];
+  steps.forEach(s=>{
+    svg.appendChild(el('rect',{x:s.x,y:s.y,width:250,height:44,rx:10,fill:'#1c2330',stroke:'#4a6a96','stroke-width':1.6}));
+    svg.appendChild(el('text',{x:s.x+125,y:s.y+19,'text-anchor':'middle',fill:'#fff','font-size':12.5,'font-weight':700},s.t));
+    svg.appendChild(el('text',{x:s.x+125,y:s.y+35,'text-anchor':'middle',fill:'#9ab0cc','font-size':9.5},s.s));
+  });
+  function ar(x1,y1,x2,y2,c){svg.appendChild(el('path',{d:`M${x1},${y1} L${x2},${y2}`,stroke:c||'#7d97b8','stroke-width':2,fill:'none','marker-end':`url(#${c?'lg':'la'})`}));}
+  ar(310,52,430,52);           // ①→②
+  ar(680,52,800,52);           // ②→③
+  ar(925,74,925,130); ar(925,130,870,152); // ③→④ 折
+  // ④ → 判定
+  svg.appendChild(el('polygon',{points:'500,152 460,120 500,88 540,120',fill:'#102416',stroke:'#7ad98f','stroke-width':2}));
+  svg.appendChild(el('text',{x:500,y:116,'text-anchor':'middle',fill:'#7ad98f','font-size':10.5,'font-weight':800},'>=80%?'));
+  svg.appendChild(el('text',{x:500,y:132,'text-anchor':'middle',fill:'#7ad98f','font-size':8.5},'规范分不丢?'));
+  ar(620,152,540,120);
+  // 是 → 点亮
+  svg.appendChild(el('rect',{x:180,y:130,width:230,height:44,rx:10,fill:'#102416',stroke:'#7ad98f','stroke-width':1.6}));
+  svg.appendChild(el('text',{x:295,y:149,'text-anchor':'middle',fill:'#7ad98f','font-size':12,'font-weight':700},'✓ 过关 · 树叶点亮'));
+  svg.appendChild(el('text',{x:295,y:165,'text-anchor':'middle',fill:'#557a62','font-size':9.5},'记入错题本 → 下一章'));
+  ar(460,120,410,140,'#7ad98f');
+  // 否 → 回②
+  const bx=555+0, by=120+62;
+  svg.appendChild(el('path',{d:`M500,182 L500,205 L185,205 L185,74`,stroke:'#ffb020','stroke-width':1.3,fill:'none','stroke-dasharray':'4 3',opacity:.8,'marker-end':'url(#la)'}));
+  svg.appendChild(el('text',{x:330,y:198,fill:'#8f7a4a','font-size':9},'否：当日回补（例题组换同型再来一轮）→ 重测'));
+})();
+
+/* ═══ 图6 阶梯 ═══ */
+(function(){
+  const svg=attach('ladder'); if(!svg)return;
+  const steps=[
+    {n:'如数家珍',lv:'记忆 · 测绘',w:'全树三色版图',c:'#6fb6ff'},
+    {n:'庖丁解牛',lv:'理解 · 拆解',w:'逐簇精讲闭环',c:'#7ad98f'},
+    {n:'融会贯通',lv:'应用 · 联结',w:'三大跨簇专题',c:'#b29aff'},
+    {n:'炉火纯青',lv:'分析 · 实战',w:'全真＋归因策略',c:'#ffb020'},
+    {n:'妙笔生花',lv:'创造 · 输出',w:'巅峰状态执笔',c:'#ff7ad9'},
+  ];
+  const SW=200, BASE=280, RISE=40, GAP=192;
+  steps.forEach((st,i)=>{
+    const x=30+i*GAP, h=64+i*RISE, top=BASE-h;
+    svg.appendChild(el('rect',{x,y:top,width:SW,height:h,rx:6,fill:'#1c2330',stroke:st.c,'stroke-width':2}));
+    svg.appendChild(el('rect',{x,y:top,width:SW,height:42,rx:6,fill:st.c,opacity:.92}));
+    svg.appendChild(el('text',{x:x+SW/2,y:top+27,'text-anchor':'middle',fill:'#141414','font-size':15,'font-weight':800},st.n));
+    svg.appendChild(el('text',{x:x+SW/2,y:top+62,'text-anchor':'middle',fill:st.c,'font-size':11,'font-weight':700},st.lv));
+    svg.appendChild(el('text',{x:x+SW/2,y:top+80,'text-anchor':'middle',fill:'#b8c6da','font-size':10},st.w));
+    if(i<4) svg.appendChild(el('text',{x:x+SW+GAP/2-SW/2,y:top-RISE/2+6,'text-anchor':'middle',fill:'#8f8f8f','font-size':13},'↗'));
+  });
+  const fx=30+4*GAP+SW/2, ftop=BASE-(64+4*RISE);
+  svg.appendChild(el('line',{x1:fx,y1:ftop,x2:fx,y2:ftop-44,stroke:'#ff5f5f','stroke-width':3}));
+  svg.appendChild(el('polygon',{points:`${fx},${ftop-44} ${fx+62},${ftop-34} ${fx},${ftop-24}`,fill:'#ff5f5f'}));
+  svg.appendChild(el('text',{x:fx+68,y:ftop-32,fill:'#ff8a8a','font-size':12.5,'font-weight':800},'D45 执笔点睛'));
+  svg.appendChild(el('text',{x:fx+68,y:ftop-16,fill:'#8f8f8f','font-size':10},'五级掌控 · 一步一闸门'));
+  svg.appendChild(el('text',{x:30,y:BASE+34,fill:'#8f8f8f','font-size':10.5},'每个阶段＝布鲁姆认知层级一级：记忆（认地图）→ 理解（拆结构）→ 应用（跨簇用）→ 分析（错因归位）→ 创造（考场输出）——成语名即掌控者身份，走完阶梯即"从认识化学到化学为我所用"'));
+})();
+</script>
+</body>
+</html>
